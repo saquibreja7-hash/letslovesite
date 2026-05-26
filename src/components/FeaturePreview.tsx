@@ -6,8 +6,9 @@ import { CalendarDays, GalleryHorizontal, MessageCircle, Users } from "lucide-re
 
 import homeShot from "../../Assests/Screenshot_20260524_175953_Let's Love.jpg";
 import memoriesShot from "../../Assests/Screenshot_20260524_193259_Let's Love.jpg";
-import moodShot from "../../Assests/Screenshot_20260524_181020_Let's Love.jpg";
+import chatShot from "../../Assests/Screenshot_20260524_184547_Let's Love.jpg";
 import goalsShot from "../../Assests/Screenshot_20260524_182158_Let's Love.jpg";
+import plansShot from "../../Assests/Screenshot_20260524_185118_Let's Love.jpg";
 
 const features: Array<{
   label: string;
@@ -22,7 +23,7 @@ const features: Array<{
     label: "Home",
     title: "Build a private home screen for two",
     copy: "See partner presence, anniversaries, birthdays, daily check-ins, recent photos, and quick actions in one calm relationship home.",
-    src: homeShot,
+    src: goalsShot,
     alt: "Let's Love home screen preview",
     icon: Users,
     tone: "blue",
@@ -40,7 +41,7 @@ const features: Array<{
     label: "Chat",
     title: "Stay close with chat, voice notes, and calls",
     copy: "Send real-time messages, images, reactions, replies, edits, voice notes, and start a private one-on-one call from the couple space.",
-    src: moodShot,
+    src: chatShot,
     alt: "Let's Love chat and connection screen preview",
     icon: MessageCircle,
     tone: "violet",
@@ -49,7 +50,7 @@ const features: Array<{
     label: "Plans",
     title: "Plan goals, tasks, dates, and rituals",
     copy: "Use shared goals, todos, date ideas, a calendar, daily questions, games, and streaks to make everyday effort visible.",
-    src: goalsShot,
+    src: plansShot,
     alt: "Let's Love goals and planning screen preview",
     icon: CalendarDays,
     tone: "amber",

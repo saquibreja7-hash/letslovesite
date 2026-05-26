@@ -1,10 +1,9 @@
 import Image, { type StaticImageData } from "next/image";
-import type { ComponentType } from "react";
+import type { ComponentType, CSSProperties } from "react";
 import {
   ArrowRight,
-  Bell,
+  ArrowUpRight,
   CalendarCheck,
-  Check,
   ChevronDown,
   ClipboardList,
   Diamond,
@@ -14,7 +13,6 @@ import {
   Gift,
   Heart,
   ImageIcon,
-  LockKeyhole,
   Mail,
   MessageCircle,
   Mic,
@@ -23,16 +21,17 @@ import {
   ShieldCheck,
   Smile,
   Sparkles,
-  Star,
   Video,
 } from "lucide-react";
 
 import { FeaturePreview } from "@/components/FeaturePreview";
+import { HeroPhoneParallax } from "@/components/HeroPhoneParallax";
+import { MascotParallax } from "@/components/MascotParallax";
+import { RoutineParallax } from "@/components/RoutineParallax";
 import homeShot from "../../Assests/Screenshot_20260524_175953_Let's Love.jpg";
 import memoriesShot from "../../Assests/Screenshot_20260524_193259_Let's Love.jpg";
 import moodShot from "../../Assests/Screenshot_20260524_181020_Let's Love.jpg";
 import chatShot from "../../Assests/Screenshot_20260524_184910_Let's Love.jpg";
-import privacyShot from "../../Assests/Screenshot_20260525_121751_Let's Love.jpg";
 import moodBoardShowcase from "../../Assests/Screenshot_20260524_180845_Let's Love.jpg";
 import touchScannerShowcase from "../../Assests/Screenshot_20260524_181806_Let's Love.jpg";
 import dateIdeasShowcase from "../../Assests/Screenshot_20260524_185118_Let's Love.jpg";
@@ -42,10 +41,8 @@ const navItems = ["Features", "Together", "Plans", "Privacy", "FAQ"];
 const heroScreens = [
   { src: moodShot, alt: "Let's Love mood board screen", className: "hero-phone hero-phone-left" },
   { src: homeShot, alt: "Let's Love home dashboard screen", className: "hero-phone hero-phone-center" },
-  { src: memoriesShot, alt: "Let's Love memories feed screen", className: "hero-phone hero-phone-right" },
+  { src: moodBoardShowcase, alt: "Let's Love mood board notes screen", className: "hero-phone hero-phone-right" },
 ];
-
-const companyMarks = ["Private Pairing", "Voice Notes", "Love Touch", "Memory Magic", "Daily Questions", "Shared Calendar"];
 
 const layeredScreens = [
   {
@@ -108,13 +105,6 @@ const connectionTools: Array<{
   { title: "Mood Board", copy: "Pin little notes for each other so the day has a place to land.", icon: ClipboardList },
 ];
 
-const trustDetails = [
-  "Everything shared lives inside one paired couple space, not a public profile.",
-  "Pairing uses partner invite flow with code or QR, so the app is useful only after both people connect.",
-  "App lock, restrictive media rules, rate limits, and account deletion flows are part of the product plan.",
-  "The Android app is built with Firebase Auth, Firestore, Storage, FCM, and Cloud Functions.",
-];
-
 const footerColumns = [
   {
     title: "Product",
@@ -134,25 +124,24 @@ const footerColumns = [
   },
 ];
 
-const proofCards = [
-  {
-    quote:
-      "Phase 1 and Phase 2 cover pairing, chat, image sharing, memories, voice notes, goals, todos, date ideas, daily quotes, birthday countdowns, and photo reactions.",
-    name: "Built beyond the basics",
-    detail: "Real product scope",
-  },
-  {
-    quote:
-      "Hardening work includes Firestore and Storage rules, rate limits, message ordering, validators, FCM token hygiene, and monitoring hooks.",
-    name: "Designed for private data",
-    detail: "Security and reliability",
-  },
-  {
-    quote:
-      "Phase 3 features include video calls, Send Love, Missing You, call history, love animations, and native Android widget groundwork.",
-    name: "Richer connection layer",
-    detail: "Current roadmap",
-  },
+const appComparisonTiles: Array<{
+  label: string;
+  copy: string;
+  logo: string;
+  className: string;
+}> = [
+  { label: "WhatsApp", copy: "private chat", logo: "https://cdn.simpleicons.org/whatsapp/25D366", className: "app-orbit-1" },
+  { label: "Instagram", copy: "shared memories", logo: "https://cdn.simpleicons.org/instagram/E4405F", className: "app-orbit-2" },
+  { label: "Telegram", copy: "quick signals", logo: "https://cdn.simpleicons.org/telegram/26A5E4", className: "app-orbit-3" },
+  { label: "Facebook", copy: "relationship moments", logo: "https://cdn.simpleicons.org/facebook/1877F2", className: "app-orbit-4" },
+  { label: "Google Meet", copy: "couple calls", logo: "https://cdn.simpleicons.org/googlemeet/00897B", className: "app-orbit-5" },
+  { label: "Google Calendar", copy: "dates and plans", logo: "https://cdn.simpleicons.org/googlecalendar/4285F4", className: "app-orbit-6" },
+  { label: "Google Photos", copy: "private gallery", logo: "https://cdn.simpleicons.org/googlephotos/4285F4", className: "app-orbit-7" },
+  { label: "Notion", copy: "love letters", logo: "https://cdn.simpleicons.org/notion/000000", className: "app-orbit-8" },
+  { label: "Discord", copy: "play for two", logo: "https://cdn.simpleicons.org/discord/5865F2", className: "app-orbit-9" },
+  { label: "Snapchat", copy: "daily moments", logo: "https://cdn.simpleicons.org/snapchat/FFFC00", className: "app-orbit-10" },
+  { label: "Signal", copy: "paired privacy", logo: "https://cdn.simpleicons.org/signal/3A76F0", className: "app-orbit-11" },
+  { label: "Pinterest", copy: "date ideas", logo: "https://cdn.simpleicons.org/pinterest/E60023", className: "app-orbit-12" },
 ];
 
 const faqs = [
@@ -213,7 +202,7 @@ export default function Home() {
               Learn more
             </a>
             <a
-              href="#download"
+              href="#features"
               className="site-nav-cta"
             >
               Get the app
@@ -223,22 +212,78 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="relative px-5 pb-20 pt-10 sm:px-8 sm:pb-28 sm:pt-14">
+      <section className="hero-section relative px-5 pb-20 pt-10 sm:px-8 sm:pb-28 sm:pt-14">
+        <div className="hero-grid" aria-hidden="true" />
         <div className="hero-glow hero-glow-blue" />
         <div className="hero-glow hero-glow-pink" />
 
-        <div className="mx-auto max-w-7xl text-center">
-          <div className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-black text-slate-600 shadow-sm">
-            <span className="flex -space-x-2">
-              {[0, 1, 2].map((item) => (
-                <span key={item} className="size-5 rounded-full border-2 border-white bg-gradient-to-br from-[#ff7aa2] to-[#2379ff]" />
-              ))}
+        <div className="hero-floating-hearts" aria-hidden="true">
+          <span className="hero-floating-heart hero-heart-left-1">♥</span>
+          <span className="hero-floating-heart hero-heart-left-2">♥</span>
+          <span className="hero-floating-heart hero-heart-left-3">♥</span>
+          <span className="hero-floating-heart hero-heart-right-1">♥</span>
+          <span className="hero-floating-heart hero-heart-right-2">♥</span>
+          <span className="hero-floating-heart hero-heart-right-3">♥</span>
+        </div>
+
+        <div className="hero-hanging-cards" aria-hidden="true">
+          <div className="hero-hanging-card hero-hanging-left hero-hanging-memory">
+            <span className="hero-hanging-icon">
+              <ImageIcon className="size-5" />
             </span>
+            <strong>Memory Magic</strong>
+            <span>7 shared moments</span>
+          </div>
+          <div className="hero-hanging-card hero-hanging-left-mid hero-hanging-letter">
+            <span className="hero-hanging-icon">
+              <Mail className="size-5" />
+            </span>
+            <strong>Love Letter</strong>
+            <span>Saved for later</span>
+          </div>
+          <div className="hero-hanging-card hero-hanging-left-lower hero-hanging-date">
+            <span className="hero-hanging-icon">
+              <CalendarCheck className="size-5" />
+            </span>
+            <strong>Date Night</strong>
+            <span>Friday, 8:00 PM</span>
+          </div>
+          <div className="hero-hanging-card hero-hanging-right hero-hanging-touch">
+            <span className="hero-hanging-icon">
+              <Heart className="size-5" />
+            </span>
+            <strong>Love Touch</strong>
+            <span>Maybelline sent love</span>
+          </div>
+          <div className="hero-hanging-card hero-hanging-right-mid hero-hanging-checkin">
+            <span className="hero-hanging-icon">
+              <Smile className="size-5" />
+            </span>
+            <strong>Daily Check-In</strong>
+            <span>Feeling close today</span>
+          </div>
+          <div className="hero-hanging-card hero-hanging-right-lower hero-hanging-question">
+            <span className="hero-hanging-icon">
+              <MessageCircle className="size-5" />
+            </span>
+            <strong>Daily Question</strong>
+            <span>Both answers ready</span>
+          </div>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl text-center">
+          <div className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-black text-slate-600 shadow-sm">
             Built for exactly two people
           </div>
 
           <h1 className="mx-auto max-w-4xl text-balance text-5xl font-black leading-[0.98] tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
-            Your Private Couple Space for Every Little Thing
+            <span className="block">Your Private Couple Space</span>
+            <span className="hero-flip-line" aria-label="for every little thing">
+              <span>for Every Little Thing</span>
+              <span>for Daily Love Rituals</span>
+              <span>for Memories You Keep</span>
+              <span>for Plans Made Together</span>
+            </span>
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
@@ -247,7 +292,7 @@ export default function Home() {
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <a
-              href="#download"
+              href="#features"
               className="inline-flex h-12 items-center gap-2 rounded-full bg-[#2379ff] px-6 text-sm font-black text-white shadow-xl shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-[#1267e7]"
             >
               Start your shared space
@@ -263,16 +308,59 @@ export default function Home() {
           </div>
 
           <div className="hero-stage" aria-label="Let's Love product screenshots">
+            <HeroPhoneParallax />
             {heroScreens.map((screen) => (
               <PhoneFrame key={screen.alt} {...screen} />
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-4 text-xs font-black uppercase tracking-[0.18em] text-slate-400 sm:grid-cols-3 lg:grid-cols-6">
-            {companyMarks.map((mark) => (
-              <div key={mark} className="rounded-full border border-slate-200/80 bg-white/70 px-3 py-3">
-                {mark}
-              </div>
+      <section className="mascot-section px-5 py-24 sm:px-8" aria-label="How Let's Love brings couples together">
+        <MascotParallax />
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
+              Three ways Let&apos;s Love brings you closer
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-sm font-medium leading-6 text-slate-500">
+              From first pairing to private rituals, each part of the app is built to help couples feel present, protected, and connected.
+            </p>
+          </div>
+
+          <div className="mascot-card-stage">
+            {[
+              {
+                src: "/mascots/intro-connection.png",
+                alt: "Couple connecting through Let's Love",
+                title: "Connect from anywhere",
+                copy: "Pair privately, send small signals, and keep presence alive even when the day pulls you apart.",
+                className: "mascot-card-left",
+              },
+              {
+                src: "/mascots/intro-private.png",
+                alt: "Couple sharing a private hug",
+                title: "Keep it just between you",
+                copy: "Your chats, memories, letters, and prompts live in one space made for exactly two people.",
+                className: "mascot-card-center",
+              },
+              {
+                src: "/mascots/intro-together.png",
+                alt: "Couple using phones together",
+                title: "Build daily rituals",
+                copy: "Turn check-ins, date plans, mood notes, and questions into little routines you both return to.",
+                className: "mascot-card-right",
+              },
+            ].map((card) => (
+              <article key={card.title} className={`mascot-card ${card.className}`}>
+                <div className="mascot-image-wrap">
+                  <Image src={card.src} alt={card.alt} width={620} height={620} sizes="(max-width: 900px) 82vw, 360px" className="mascot-image" />
+                </div>
+                <div className="mascot-card-copy">
+                  <h3>{card.title}</h3>
+                  <p>{card.copy}</p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -322,59 +410,78 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="together" className="px-5 py-24 sm:px-8">
+      <section id="together" className="overflow-hidden px-5 py-24 sm:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
-              A private world that feels like yours
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm font-medium leading-6 text-slate-500">
-              Let&apos;s Love has real feature areas for Memories, Shared Gallery, Memory Magic, Couple Games, Love Touch, Love Letter, Couple Streak, and private chat.
-            </p>
-          </div>
-
-          <div className="mt-12 grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-          <div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {togetherTools.map(({ title, copy, icon: Icon }) => (
-                <div key={title} className="tool-card">
-                  <span className="tool-icon">
-                    <Icon className="size-5" />
-                  </span>
-                  <h3 className="mt-5 text-base font-black tracking-tight text-slate-950">{title}</h3>
-                  <p className="mt-1 text-sm font-medium leading-6 text-slate-500">{copy}</p>
+          <div className="private-world-grid">
+            <div className="private-world-icons" aria-label="Let's Love feature icons">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <span key={item} className={`private-world-ghost private-world-ghost-${item}`} />
+              ))}
+              {togetherTools.map(({ title, icon: Icon }, index) => (
+                <div key={title} className={`private-world-icon-card private-world-icon-${index + 1}`}>
+                  <Icon className="size-6" />
                 </div>
               ))}
             </div>
-          </div>
 
-          <div className="showcase-panel">
-            <Image src={chatShot} alt="Let's Love chat and relationship screen" sizes="(max-width: 1024px) 88vw, 620px" className="showcase-image showcase-image-back" />
-            <Image src={privacyShot} alt="Let's Love privacy and app screen" sizes="(max-width: 1024px) 76vw, 420px" className="showcase-image showcase-image-front" />
-          </div>
+            <div className="private-world-copy">
+              <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">
+                A private world that feels like yours
+              </h2>
+              <p className="mt-5 max-w-2xl text-sm font-medium leading-7 text-slate-500 sm:text-base">
+                Let&apos;s Love brings memories, private chat, playful touches, saved letters, couple games, and shared galleries into one paired space built only for two people.
+              </p>
+
+              <div className="mt-8 grid gap-4">
+                {togetherTools.map(({ title, copy, icon: Icon }) => (
+                  <article key={title} className="private-world-feature-row">
+                    <span className="private-world-row-icon">
+                      <Icon className="size-4" />
+                    </span>
+                    <span>
+                      <h3>{title}</h3>
+                      <p>{copy}</p>
+                    </span>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="plans" className="px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mx-auto max-w-2xl text-center">
+      <section id="plans" className="routine-section px-5 py-24 sm:px-8">
+        <RoutineParallax />
+        <div className="routine-shell mx-auto max-w-7xl">
+          <div className="routine-heading">
             <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
               Turn intentions into shared routines
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm font-medium leading-6 text-slate-500">
+            <p className="mt-4 max-w-xl text-sm font-medium leading-6 text-slate-500">
               Practical planning tools and softer daily prompts help couples coordinate life and still make room for play.
             </p>
           </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {[...planningTools, ...connectionTools.slice(0, 5)].map(({ title, copy, icon: Icon }) => (
+          <div className="routine-bars routine-bars-top" aria-hidden="true">
+            {[72, 132, 90, 126, 116, 108, 100, 84, 68].map((height, index) => (
+              <span key={`top-${height}-${index}`} style={{ "--bar-height": `${height}px` } as CSSProperties} />
+            ))}
+          </div>
+          <div className="routine-bars routine-bars-bottom" aria-hidden="true">
+            {[70, 118, 82, 130, 112, 94, 106, 76].map((height, index) => (
+              <span key={`bottom-${height}-${index}`} style={{ "--bar-height": `${height}px` } as CSSProperties} />
+            ))}
+          </div>
+
+          <div className="routine-feature-grid">
+            {[...planningTools, ...connectionTools.slice(0, 5)].map(({ title, copy, icon: Icon }, index) => (
               <article key={title} className="mini-feature-card">
-                <span className="grid size-11 place-items-center rounded-2xl bg-white text-[#be123c] shadow-sm">
-                  <Icon className="size-5" />
+                <span className="routine-icon-tile">
+                  <Icon className="size-4" />
                 </span>
-                <h3 className="mt-5 text-lg font-black tracking-tight text-slate-950">{title}</h3>
-                <p className="mt-2 text-sm font-medium leading-6 text-slate-500">{copy}</p>
+                <span className="routine-kicker">{index + 1 < 10 ? `0${index + 1}` : index + 1} / Routine</span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
               </article>
             ))}
           </div>
@@ -429,74 +536,49 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="privacy" className="px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-6xl rounded-[2rem] bg-gradient-to-br from-[#eef8ff] via-white to-[#fff0f6] p-6 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200/70 sm:p-10 lg:p-12">
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-            <div>
-              <span className="grid size-12 place-items-center rounded-2xl bg-white text-emerald-600 shadow-sm">
-                <ShieldCheck className="size-6" />
-              </span>
-              <h2 className="mt-5 text-balance text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-                Private by default, personal by design
-              </h2>
-              <p className="mt-4 text-sm font-medium leading-7 text-slate-500">
-                Let&apos;s Love is built around a paired space, not a public feed, discovery surface, or group network. The product requirements keep the relationship strictly one-on-one.
-              </p>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                { icon: LockKeyhole, title: "Paired access", copy: "One private space for two people." },
-                { icon: Bell, title: "Gentle signals", copy: "Pings and reminders without noisy feeds." },
-                { icon: MessageCircle, title: "Context-rich chat", copy: "Messages beside memories and moods." },
-              ].map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <div key={item.title} className="rounded-3xl bg-white/80 p-6 shadow-sm ring-1 ring-white">
-                    <Icon className="size-6 text-[#2379ff]" />
-                    <h3 className="mt-5 text-sm font-black text-slate-950">{item.title}</h3>
-                    <p className="mt-2 text-sm font-medium leading-6 text-slate-500">{item.copy}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-3 md:grid-cols-2">
-            {trustDetails.map((detail) => (
-              <div key={detail} className="flex gap-3 rounded-2xl bg-white/80 p-4 text-sm font-semibold leading-6 text-slate-600 shadow-sm ring-1 ring-white">
-                <Check className="mt-0.5 size-4 shrink-0 text-emerald-600" />
-                {detail}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
-              Built like a real app, not a mockup
+      <section id="privacy" className="privacy-editorial px-5 py-24 sm:px-8">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1fr] lg:items-start">
+          <div className="privacy-editorial-copy">
+            <h2 className="text-balance text-4xl font-normal tracking-tight text-slate-950 sm:text-5xl">
+              Private by default, <span className="text-[#ff4f7b]">personal by design.</span>
             </h2>
-            <p className="mt-4 text-sm font-medium text-slate-500">The landing page now reflects the product folder: shipped phases, hardening work, and the richer connection roadmap.</p>
+            <p className="mt-6 text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
+              Let&apos;s Love keeps your couple space intimate, useful, and made only for two.
+            </p>
+            <a
+              href="#features"
+              className="mt-9 inline-flex h-11 items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:text-slate-950"
+            >
+              See private features
+              <ArrowRight className="size-4" />
+            </a>
           </div>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-2">
-            {proofCards.map((card) => (
-              <figure key={card.name} className="proof-card">
-                <div className="flex gap-1 text-[#ffb020]">
-                  {[0, 1, 2, 3, 4].map((star) => (
-                    <Star key={star} className="size-4 fill-current" />
-                  ))}
-                </div>
-                <blockquote className="mt-5 text-base font-bold leading-7 text-slate-800">{card.quote}</blockquote>
-                <figcaption className="mt-8">
-                  <div className="font-black text-slate-950">{card.name}</div>
-                  <div className="text-sm font-medium text-slate-500">{card.detail}</div>
-                </figcaption>
-              </figure>
+          <div className="privacy-editorial-list">
+            {[
+              {
+                title: "For Pairing",
+                copy: "one invite flow creates a private home screen that only both partners can access.",
+              },
+              {
+                title: "For Memories",
+                copy: "photos, comments, reactions, albums, and shared gallery moments stay inside your paired space.",
+              },
+              {
+                title: "For Daily Rituals",
+                copy: "questions, goals, date ideas, streaks, and check-ins help you return to each other without noisy feeds.",
+              },
+              {
+                title: "For Trust",
+                copy: "app lock, account deletion, restrictive media rules, and Firebase-backed controls support a safer private space.",
+              },
+            ].map((item) => (
+              <div key={item.title} className="privacy-editorial-point">
+                <ArrowUpRight className="privacy-editorial-arrow" />
+                <p>
+                  <strong>{item.title}:</strong> {item.copy}
+                </p>
+              </div>
             ))}
           </div>
         </div>
@@ -527,40 +609,33 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="download" className="px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] bg-[radial-gradient(circle_at_10%_20%,#fff7dd,transparent_32%),radial-gradient(circle_at_78%_18%,#dff4ff,transparent_34%),linear-gradient(135deg,#fff0f6,#ffffff_45%,#eef8ff)] p-8 shadow-xl shadow-slate-200/60 ring-1 ring-slate-200/60 sm:p-12">
-          <div className="grid items-center gap-10 lg:grid-cols-[1fr_0.9fr]">
-            <div>
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-black text-slate-600 shadow-sm">
-                <Heart className="size-4 fill-[#ff4f7b] text-[#ff4f7b]" />
-                One subscription, two accounts
-              </div>
-              <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
-                Unlock the whole couple space together
-              </h2>
-              <p className="mt-4 max-w-xl text-sm font-medium leading-7 text-slate-600">
-                Premium unlocks memories, gallery, games, desire match, goals, todos, date ideas, calendar, quotes, love touches, and more for both partners.
-              </p>
-              <a
-                href="#"
-                className="mt-7 inline-flex h-12 items-center gap-2 rounded-full bg-[#2379ff] px-6 text-sm font-black text-white shadow-xl shadow-blue-500/25 transition hover:bg-[#1267e7]"
-              >
-                Get Let&apos;s Love
-                <ArrowRight className="size-4" />
-              </a>
+      <section className="app-orbit-section px-5 py-28 sm:px-8" aria-label="One couple app replaces scattered social tools">
+        <div className="app-orbit-grid" aria-hidden="true">
+          {appComparisonTiles.map(({ label, copy, logo, className }) => (
+            <div key={label} className={`app-orbit-tile ${className}`}>
+              <span className="app-orbit-icon">
+                <img src={logo} alt="" aria-hidden="true" />
+              </span>
+              <span className="app-orbit-label">{label}</span>
+              <span className="app-orbit-copy">{copy}</span>
             </div>
+          ))}
+        </div>
 
-            <div className="download-badges">
-              {["Unlimited memories", "Deeper couple tools", "More loving touches"].map((badge) => (
-                <div key={badge} className="rounded-2xl border border-white/70 bg-white/85 p-5 text-center font-black text-slate-800 shadow-sm">
-                  <div className="mx-auto mb-3 grid size-10 place-items-center rounded-full bg-[#2379ff] text-white">
-                    <Check className="size-5" />
-                  </div>
-                  {badge}
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="relative z-10 mx-auto max-w-3xl text-center">
+          <h2 className="text-balance text-4xl font-normal tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+            One private place for what five apps try to do
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
+            Chat like a messenger, save moments like a social app, plan dates like a calendar, keep photos like a gallery, and send love like only a couple app can.
+          </p>
+          <a
+            href="#features"
+            className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-slate-950 px-6 text-sm font-black text-white shadow-xl shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800"
+          >
+            Keep everything between you two
+            <Heart className="size-4 fill-current" />
+          </a>
         </div>
       </section>
 
