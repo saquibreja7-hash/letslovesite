@@ -105,24 +105,7 @@ const connectionTools: Array<{
   { title: "Mood Board", copy: "Pin little notes for each other so the day has a place to land.", icon: ClipboardList },
 ];
 
-const footerColumns = [
-  {
-    title: "Product",
-    links: ["Private chat", "Memories", "Love Touch", "Daily check-ins", "Shared calendar"],
-  },
-  {
-    title: "Features",
-    links: ["Voice notes", "Couple goals", "Date ideas", "Memory Magic", "Desire Match"],
-  },
-  {
-    title: "Resources",
-    links: ["Help center", "Privacy policy", "Terms", "Account deletion", "Contact support"],
-  },
-  {
-    title: "Company",
-    links: ["About", "Roadmap", "Premium", "Security", "Play Store"],
-  },
-];
+
 
 const appComparisonTiles: Array<{
   label: string;
@@ -160,6 +143,22 @@ const faqs = [
   {
     q: "Is it useful for long-distance couples?",
     a: "Yes. Chat, voice notes, presence, Send Love, Missing You, mood check-ins, daily questions, calls, and shared memories are especially useful when you cannot be together every day.",
+  },
+  {
+    q: "Is the app available on iOS or desktop?",
+    a: "Let's Love is built Android-first to deliver highly integrated widgets, native notifications, and optimal performance on Android devices. iOS support and a web companion are actively planned for future releases.",
+  },
+  {
+    q: "How secure is our private space?",
+    a: "Your chats, photos, and letters are protected with robust, Firebase-backed security. We prioritize your privacy above all else—there are no public profiles, no search indexes, and absolutely no data sharing with advertisers.",
+  },
+  {
+    q: "What happens to our data if one of us deletes the app?",
+    a: "Your shared space remains safely backed up in the cloud. If you reinstall the app or change devices, simply log back in to reconnect instantly. You can also permanently delete your account and all associated data from the settings at any time.",
+  },
+  {
+    q: "Can we customize the look of our shared home screen?",
+    a: "Absolutely! You can choose custom wallpapers, pick highlight colors, pin your favorite couple photos, customize quick action widgets, and set a custom greeting at the top.",
   },
 ];
 
@@ -205,8 +204,10 @@ export default function Home() {
               href="#features"
               className="site-nav-cta"
             >
+              <svg className="size-3.5 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
+              </svg>
               Get the app
-              <ArrowRight className="size-4" />
             </a>
           </div>
         </div>
@@ -276,7 +277,7 @@ export default function Home() {
             Built for exactly two people
           </div>
 
-          <h1 className="mx-auto max-w-4xl text-balance text-5xl font-black leading-[0.98] tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
+          <h1 className="mx-auto max-w-4xl text-balance text-4xl font-black leading-[1.1] tracking-tight text-slate-950 sm:text-6xl lg:text-7xl sm:leading-[0.98]">
             <span className="block">Your Private Couple Space</span>
             <span className="hero-flip-line" aria-label="for every little thing">
               <span>for Every Little Thing</span>
@@ -293,17 +294,12 @@ export default function Home() {
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#features"
-              className="inline-flex h-12 items-center gap-2 rounded-full bg-[#2379ff] px-6 text-sm font-black text-white shadow-xl shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-[#1267e7]"
+              className="inline-flex h-12 items-center gap-2.5 rounded-full bg-[#2379ff] px-6 text-sm font-black text-white shadow-xl shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-[#1267e7]"
             >
-              Start your shared space
-              <Sparkles className="size-4" />
-            </a>
-            <a
-              href="#features"
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-slate-200 bg-white px-6 text-sm font-black text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:text-slate-950"
-            >
-              See features
-              <ChevronDown className="size-4" />
+              <svg className="size-4 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
+              </svg>
+              Signup For Closed Testing
             </a>
           </div>
 
@@ -316,7 +312,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mascot-section px-5 py-24 sm:px-8" aria-label="How Let's Love brings couples together">
+      <section className="mascot-section px-5 py-14 sm:px-8" aria-label="How Let's Love brings couples together">
         <MascotParallax />
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-2xl text-center">
@@ -366,7 +362,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="features" className="px-5 py-24 sm:px-8">
+      <section id="features" className="px-5 py-14 sm:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="mt-3 text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
@@ -381,7 +377,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-5 py-24 sm:px-8">
+      <section className="px-5 py-14 sm:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="layered-showcase">
             <div className="mx-auto max-w-2xl text-center">
@@ -410,7 +406,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="together" className="overflow-hidden px-5 py-24 sm:px-8">
+      <section id="together" className="overflow-hidden px-5 py-14 sm:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="private-world-grid">
             <div className="private-world-icons" aria-label="Let's Love feature icons">
@@ -450,7 +446,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="plans" className="routine-section px-5 py-24 sm:px-8">
+      <section id="plans" className="routine-section px-5 py-14 sm:px-8">
         <RoutineParallax />
         <div className="routine-shell mx-auto max-w-7xl">
           <div className="routine-heading">
@@ -488,55 +484,32 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="connection-split">
-            <div className="connection-phone-wrap">
-              <div className="connection-phone-frame">
-                <Image src={chatShot} alt="Let's Love private chat screen" sizes="(max-width: 1024px) 70vw, 310px" className="connection-phone-image" />
-              </div>
-            </div>
+      <section id="faq" className="px-5 py-14 sm:px-8">
+        <div className="mx-auto max-w-4xl">
+          <div className="text-center">
+            <h2 className="text-balance text-4xl font-display text-slate-950 sm:text-5xl tracking-normal">
+              Common Questions
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm font-medium text-slate-500 leading-6">
+              Everything you need to know about Let&apos;s Love features, privacy, and plans.
+            </p>
+          </div>
 
-            <div className="connection-text-box">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#2379ff]">Connection layer</p>
-              <h2 className="mt-3 text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">Fast ways to feel close</h2>
-              <p className="mt-4 text-sm font-medium leading-7 text-slate-500">
-                Built-in signals make affection quick without making the app noisy. Voice notes, prompts, and gentle reminders keep the relationship warm even on busy days.
-              </p>
-
-              <div className="mt-7 grid gap-3">
-                {[
-                  { icon: Mic, title: "Voice notes", text: "Send quick audio with waveform playback and speed controls." },
-                  { icon: Send, title: "Send Love", text: "Trigger a soft notification when you want your partner to feel remembered." },
-                  { icon: Video, title: "Calls", text: "Start one-on-one calls with audio fallback and call history." },
-                  { icon: Diamond, title: "One Premium", text: "One subscription keeps both accounts unlocked." },
-                ].map(({ icon: Icon, title, text }) => (
-                  <div key={title} className="connection-signal-row">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-[#2379ff]">
-                      <Icon className="size-4" />
-                    </span>
-                    <span>
-                      <span className="block text-sm font-black text-slate-900">{title}</span>
-                      <span className="mt-0.5 block text-sm font-medium leading-5 text-slate-500">{text}</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                {connectionTools.slice(0, 4).map(({ title, icon: Icon }) => (
-                  <div key={title} className="connection-chip">
-                    <Icon className="size-5" />
-                    {title}
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="mx-auto mt-12 max-w-3xl">
+            {faqs.map((faq) => (
+              <details key={faq.q} className="faq-details group">
+                <summary className="faq-summary">
+                  {faq.q}
+                  <ChevronDown className="faq-chevron" />
+                </summary>
+                <p className="faq-answer">{faq.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="privacy" className="privacy-editorial px-5 py-24 sm:px-8">
+      <section id="privacy" className="privacy-editorial px-5 py-14 sm:px-8">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1fr] lg:items-start">
           <div className="privacy-editorial-copy">
             <h2 className="text-balance text-4xl font-normal tracking-tight text-slate-950 sm:text-5xl">
@@ -584,32 +557,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="faq" className="px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-4xl">
-          <div className="text-center">
-            <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
-              Frequently asked questions
-            </h2>
-            <p className="mt-4 text-sm font-medium text-slate-500">The practical bits before you invite your person.</p>
-          </div>
-
-          <div className="mx-auto mt-10 max-w-3xl space-y-3">
-            {faqs.map((faq, index) => (
-              <details key={faq.q} className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition open:bg-[#eef8ff]" open={index === 1}>
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-sm font-black text-slate-950">
-                  {faq.q}
-                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-500 transition group-open:bg-white">
-                    <ChevronDown className="size-4 transition group-open:rotate-180" />
-                  </span>
-                </summary>
-                <p className="mt-4 text-sm font-medium leading-6 text-slate-500">{faq.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="app-orbit-section px-5 py-28 sm:px-8" aria-label="One couple app replaces scattered social tools">
+      <section className="app-orbit-section px-5 py-18 sm:px-8" aria-label="One couple app replaces scattered social tools">
         <div className="app-orbit-grid" aria-hidden="true">
           {appComparisonTiles.map(({ label, copy, logo, className }) => (
             <div key={label} className={`app-orbit-tile ${className}`}>
@@ -631,52 +579,30 @@ export default function Home() {
           </p>
           <a
             href="#features"
-            className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-slate-950 px-6 text-sm font-black text-white shadow-xl shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800"
+            className="mt-8 inline-flex h-12 items-center gap-2.5 rounded-full bg-[#2379ff] px-6 text-sm font-black text-white shadow-xl shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-[#1267e7]"
           >
-            Keep everything between you two
-            <Heart className="size-4 fill-current" />
+            <svg className="size-4 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
+            </svg>
+            Signup For Closed Testing
           </a>
         </div>
       </section>
 
-      <footer className="border-t border-slate-200 bg-white px-5 py-12 sm:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-10 border-b border-slate-200 pb-10 lg:grid-cols-[1.2fr_3fr]">
-            <div>
-              <div className="flex items-center gap-2 font-black text-slate-950">
-                <Image src="/logo.png" alt="Let's Love logo" width={36} height={36} className="site-logo" />
-                Let&apos;s Love
-              </div>
-              <p className="mt-4 max-w-xs text-sm font-medium leading-6 text-slate-500">
-                A private Android-first couple app for memories, chat, plans, prompts, and small daily signals.
-              </p>
-            </div>
-
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {footerColumns.map((column) => (
-                <div key={column.title}>
-                  <h3 className="text-sm font-black text-slate-950">{column.title}</h3>
-                  <div className="mt-4 grid gap-3 text-sm font-semibold text-slate-500">
-                    {column.links.map((link) => (
-                      <a key={link} href="#" className="transition hover:text-slate-950">
-                        {link}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+      <footer className="site-footer">
+        <div className="site-footer-content">
+          <p className="site-footer-copyright">© 2026 Lets Love. All rights reserved.</p>
+          
+          <div className="site-footer-links">
+            <a href="#" className="site-footer-link">Terms</a>
+            <a href="#" className="site-footer-link">Privacy</a>
+            <a href="#" className="site-footer-link">Refunds</a>
+            <a href="#" className="site-footer-link">Contact</a>
           </div>
-
-          <div className="flex flex-col gap-4 pt-8 text-sm font-semibold text-slate-500 md:flex-row md:items-center md:justify-between">
-            <p>2026 Let&apos;s Love. A private app for couples.</p>
-            <div className="flex flex-wrap gap-5">
-              <a href="#" className="hover:text-slate-950">Terms</a>
-              <a href="#" className="hover:text-slate-950">Privacy</a>
-              <a href="#" className="hover:text-slate-950">Cookie Policy</a>
-              <a href="#faq" className="hover:text-slate-950">FAQ</a>
-            </div>
-          </div>
+          
+          <p className="site-footer-crafted">
+            Crafted with <span className="site-footer-heart">♥</span> by <a href="#" className="site-footer-author">JAMSAQ STUDIO</a>
+          </p>
         </div>
       </footer>
     </main>
