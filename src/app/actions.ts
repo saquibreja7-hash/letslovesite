@@ -7,6 +7,12 @@ type ClosedTestingSignupState = {
 };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const voucherCodePattern = /^[A-Z0-9-]{4,32}$/;
+
+type IssuedVoucher = {
+  voucherCode: string;
+  durationDays: number;
+};
 
 function getGoogleFormActionUrl(rawUrl: string) {
   const url = new URL(rawUrl);
@@ -21,10 +27,79 @@ function getGoogleFormActionUrl(rawUrl: string) {
   return url.toString();
 }
 
-function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTestingUrl: string) {
-  const premiumCode = process.env.CLOSED_TESTING_PREMIUM_CODE ?? "TESTLOVE3M";
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function getConfiguredVoucherDurationDays() {
+  const rawDays = process.env.EARLY_ACCESS_VOUCHER_DAYS;
+  const days = rawDays ? Number(rawDays) : 90;
+  return Number.isInteger(days) && days > 0 ? days : 90;
+}
+
+function formatVoucherDuration(days: number) {
+  if (days === 30) return "1 month";
+  if (days === 60) return "2 months";
+  if (days === 90) return "3 months";
+  if (days % 30 === 0) return `${days / 30} months`;
+  return `${days} days`;
+}
+
+async function issueEarlyAccessVoucher(email: string, firstName: string): Promise<IssuedVoucher | null> {
+  const endpoint = process.env.EARLY_ACCESS_VOUCHER_FUNCTION_URL;
+  const issuerSecret = process.env.EARLY_ACCESS_ISSUER_SECRET;
+
+  if (!endpoint || !issuerSecret) {
+    return null;
+  }
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${issuerSecret}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      firstName,
+      durationDays: getConfiguredVoucherDurationDays(),
+    }),
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not issue voucher.");
+  }
+
+  const data: unknown = await response.json();
+  const voucherCode = String((data as { voucherCode?: unknown }).voucherCode ?? "").trim().toUpperCase();
+  const durationDays = Number((data as { durationDays?: unknown }).durationDays);
+
+  if (!voucherCodePattern.test(voucherCode)) {
+    throw new Error("Voucher service returned an invalid code.");
+  }
+
+  return {
+    voucherCode,
+    durationDays: Number.isInteger(durationDays) && durationDays > 0
+      ? durationDays
+      : getConfiguredVoucherDurationDays(),
+  };
+}
+
+function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTestingUrl: string, voucher: IssuedVoucher) {
   const instagramUrl = "https://www.instagram.com/letsloveapp/";
-  const greetingName = firstName ? `, ${firstName}` : "";
+  const greetingName = firstName ? `, ${escapeHtml(firstName)}` : "";
+  const safeGroupUrl = escapeHtml(groupUrl);
+  const safePlayTestingUrl = escapeHtml(playTestingUrl);
+  const safeInstagramUrl = escapeHtml(instagramUrl);
+  const safeVoucherCode = escapeHtml(voucher.voucherCode);
+  const durationLabel = escapeHtml(formatVoucherDuration(voucher.durationDays));
 
   return `
     <!doctype html>
@@ -39,14 +114,15 @@ function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTe
             <p style="margin:0;">Hi${greetingName},<br><br></p>
             <p style="margin:0;">Thank you for opting in to test Let's Love. We're really happy to have you with us in this early closed testing phase.<br><br></p>
             <p style="margin:0;">Please complete these two steps using the same Google account you use on your Android phone:<br><br></p>
-            <p style="margin:0;">1. Join the tester Google Group: <a href="${groupUrl}" style="color:#0068A5;text-decoration:underline;">Join group</a><br></p>
-            <p style="margin:0;">2. Accept the Google Play test: <a href="${playTestingUrl}" style="color:#0068A5;text-decoration:underline;">Open Play testing</a><br><br></p>
-            <p style="margin:0;"><strong>As a small thank you, here is your 3 months paid subscription activation code: ${premiumCode}</strong><br><br></p>
+            <p style="margin:0;">1. Join the tester Google Group: <a href="${safeGroupUrl}" style="color:#0068A5;text-decoration:underline;">Join group</a><br></p>
+            <p style="margin:0;">2. Accept the Google Play test: <a href="${safePlayTestingUrl}" style="color:#0068A5;text-decoration:underline;">Open Play testing</a><br><br></p>
+            <p style="margin:0;"><strong>As a small thank you, here is your ${durationLabel} Premium voucher code: ${safeVoucherCode}</strong><br><br></p>
+            <p style="margin:0;">Redeem this code inside the app after you and your partner are paired. The code is tied to this email address and unlocks Premium for both partners in your couple space.<br><br></p>
             <p style="margin:0;">Since Let's Love is made for couples, please invite your partner to be part of closed testing too. Testing together will improve your app experience and give you a real opportunity to try the app the way it is meant to be used.<br><br></p>
             <p style="margin:0;">Your privacy matters deeply to us. Your data is stored securely on encrypted Google Cloud servers, and your couple space is designed so only you and your partner can access what you share together.<br><br></p>
             <p style="margin:0;">A small request from us: please keep the app active for 14 days. This helps us meet Google Play testing requirements and gives us enough real usage to improve the experience before publishing.<br><br></p>
             <p style="margin:0;">Please write back with any bugs, feedback, or feature requests. We'd love to accommodate helpful ideas wherever we can.<br><br></p>
-            <p style="margin:0;">You can also follow us on Instagram: <a href="${instagramUrl}" style="color:#0068A5;text-decoration:underline;">@letsloveapp</a></p>
+            <p style="margin:0;">You can also follow us on Instagram: <a href="${safeInstagramUrl}" style="color:#0068A5;text-decoration:underline;">@letsloveapp</a></p>
             <p style="margin:0;"><br>With love,<br><br></p>
             <p style="margin:0;">JAMSAQ Studio</p>
             <p style="margin:0;">&nbsp;</p>
@@ -61,7 +137,7 @@ function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTe
   `;
 }
 
-async function sendClosedTestingEmail(email: string, firstName: string) {
+async function sendClosedTestingEmail(email: string, firstName: string, voucher: IssuedVoucher) {
   const resendApiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL;
   const groupUrl = process.env.GOOGLE_GROUP_JOIN_URL;
@@ -81,7 +157,7 @@ async function sendClosedTestingEmail(email: string, firstName: string) {
       from: fromEmail,
       to: email,
       subject: "Your Let's Love closed testing links",
-      html: buildClosedTestingEmailHtml(firstName, groupUrl, playTestingUrl),
+      html: buildClosedTestingEmailHtml(firstName, groupUrl, playTestingUrl, voucher),
       text: [
         firstName ? `Thank you, ${firstName}, for opting in to test Let's Love.` : "Thank you for opting in to test Let's Love.",
         "",
@@ -91,7 +167,9 @@ async function sendClosedTestingEmail(email: string, firstName: string) {
         `1. Join the tester Google Group: ${groupUrl}`,
         `2. Accept the Google Play test: ${playTestingUrl}`,
         "",
-        `Here is your 3 months paid subscription activation code: ${process.env.CLOSED_TESTING_PREMIUM_CODE ?? "TESTLOVE3M"}`,
+        `Here is your ${formatVoucherDuration(voucher.durationDays)} Premium voucher code: ${voucher.voucherCode}`,
+        "",
+        "Redeem this code inside the app after you and your partner are paired. The code is tied to this email address and unlocks Premium for both partners in your couple space.",
         "",
         "Invite your partner too. Let's Love is made for couples, so testing together will improve your app experience and give you a real opportunity to try the app the way it is meant to be used.",
         "",
@@ -168,7 +246,8 @@ export async function requestClosedTestingAccess(
     let emailSent = false;
 
     try {
-      emailSent = await sendClosedTestingEmail(email, firstName);
+      const voucher = await issueEarlyAccessVoucher(email, firstName);
+      emailSent = voucher ? await sendClosedTestingEmail(email, firstName, voucher) : false;
     } catch {
       emailSent = false;
     }

@@ -28,14 +28,16 @@ GOOGLE_FORM_EMAIL_ENTRY_ID=entry.1234567890
 GOOGLE_FORM_FIRST_NAME_ENTRY_ID=entry.0987654321
 GOOGLE_GROUP_JOIN_URL=https://groups.google.com/g/YOUR_TESTER_GROUP
 GOOGLE_PLAY_TESTING_URL=https://play.google.com/apps/testing/YOUR_PACKAGE_NAME
+EARLY_ACCESS_VOUCHER_FUNCTION_URL=https://asia-south1-YOUR_PROJECT.cloudfunctions.net/issueEarlyAccessVoucher
+EARLY_ACCESS_ISSUER_SECRET=your_shared_backend_secret
+EARLY_ACCESS_VOUCHER_DAYS=90
 RESEND_API_KEY=re_your_api_key
 RESEND_FROM_EMAIL="Let's Love <testing@yourdomain.com>"
-CLOSED_TESTING_PREMIUM_CODE=TESTLOVE3M
 ```
 
 `GOOGLE_FORM_EMAIL_ENTRY_ID` is the Google Forms field name for the email input. `GOOGLE_FORM_FIRST_NAME_ENTRY_ID` is optional; add it if the Google Form also has a first-name question.
-Resend is optional. When `RESEND_API_KEY` and `RESEND_FROM_EMAIL` are set, the server action emails the Early Access links after signup. The form also remembers submitted emails in the current browser and asks returning users to check their inbox instead of treating duplicates as an error.
-`CLOSED_TESTING_PREMIUM_CODE` is included in the confirmation email as the 3-month paid subscription activation code.
+Resend is optional. When `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `EARLY_ACCESS_VOUCHER_FUNCTION_URL`, and `EARLY_ACCESS_ISSUER_SECRET` are set, the server action asks the app backend for a unique email-bound Premium voucher and includes it in the Early Access email after signup. The form also remembers submitted emails in the current browser and asks returning users to check their inbox instead of treating duplicates as an error.
+`EARLY_ACCESS_VOUCHER_DAYS` controls how many Premium days the generated in-app voucher grants. The app backend is the source of truth for voucher creation and redemption.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
