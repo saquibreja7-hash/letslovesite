@@ -1,4 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
+import Link from "next/link";
 import type { ComponentType, CSSProperties } from "react";
 import {
   ArrowRight,
@@ -31,8 +32,6 @@ import touchScannerShowcase from "../../Assests/Screenshot_20260524_181806_Let's
 import dateIdeasShowcase from "../../Assests/Screenshot_20260524_185118_Let's Love.jpg";
 
 const navItems = ["Features", "Together", "Plans", "Privacy", "FAQ"];
-const googleGroupJoinUrl = process.env.GOOGLE_GROUP_JOIN_URL ?? "";
-const googlePlayTestingUrl = process.env.GOOGLE_PLAY_TESTING_URL ?? "";
 
 const heroScreens = [
   { src: moodShot, alt: "Let's Love mood board screen", className: "hero-phone hero-phone-left" },
@@ -203,7 +202,7 @@ export default function Home() {
               <svg className="size-3.5 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
               </svg>
-              Closed testing
+              Early Access
             </a>
           </div>
         </div>
@@ -288,7 +287,7 @@ export default function Home() {
           </p>
 
           <div id="closed-testing" className="mt-7 scroll-mt-28">
-            <ClosedTestingForm googleGroupJoinUrl={googleGroupJoinUrl} googlePlayTestingUrl={googlePlayTestingUrl} />
+            <ClosedTestingForm />
           </div>
 
           <div className="hero-stage" aria-label="Let's Love product screenshots">
@@ -565,11 +564,7 @@ export default function Home() {
           <p className="mx-auto mt-5 max-w-2xl text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
             Chat like a messenger, save moments like a social app, plan dates like a calendar, keep photos like a gallery, and send love like only a couple app can.
           </p>
-          <ClosedTestingForm
-            className="mt-8"
-            googleGroupJoinUrl={googleGroupJoinUrl}
-            googlePlayTestingUrl={googlePlayTestingUrl}
-          />
+          <ClosedTestingForm className="mt-8" />
         </div>
       </section>
 
@@ -578,10 +573,12 @@ export default function Home() {
           <p className="site-footer-copyright">© 2026 Lets Love. All rights reserved.</p>
           
           <div className="site-footer-links">
-            <a href="#" className="site-footer-link">Terms</a>
-            <a href="#" className="site-footer-link">Privacy</a>
-            <a href="#" className="site-footer-link">Refunds</a>
-            <a href="#" className="site-footer-link">Contact</a>
+            <Link href="/terms" className="site-footer-link">Terms</Link>
+            <Link href="/privacy" className="site-footer-link">Privacy</Link>
+            <Link href="/cookie-policy" className="site-footer-link">Cookie Policy</Link>
+            <Link href="/account-deletion" className="site-footer-link">Account Deletion</Link>
+            <Link href="/data-safety" className="site-footer-link">Data Safety</Link>
+            <a href="mailto:support@jamsaq.in" className="site-footer-link">Contact</a>
           </div>
           
           <p className="site-footer-crafted">

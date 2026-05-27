@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Closed Testing Signup
+## Early Access Signup
 
 The homepage signup CTA posts email requests to Google Forms through a server action. Add these values to `.env.local` or your deployment environment:
 
@@ -34,8 +34,7 @@ CLOSED_TESTING_PREMIUM_CODE=TESTLOVE3M
 ```
 
 `GOOGLE_FORM_EMAIL_ENTRY_ID` is the Google Forms field name for the email input. `GOOGLE_FORM_FIRST_NAME_ENTRY_ID` is optional; add it if the Google Form also has a first-name question.
-When the group and Play testing URLs are set, the homepage shows both next-step links after a successful signup.
-Resend is optional. When `RESEND_API_KEY` and `RESEND_FROM_EMAIL` are set, the server action emails the tester links after signup. The form also remembers submitted emails in the current browser and shows the testing steps again instead of treating duplicates as an error.
+Resend is optional. When `RESEND_API_KEY` and `RESEND_FROM_EMAIL` are set, the server action emails the Early Access links after signup. The form also remembers submitted emails in the current browser and asks returning users to check their inbox instead of treating duplicates as an error.
 `CLOSED_TESTING_PREMIUM_CODE` is included in the confirmation email as the 3-month paid subscription activation code.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

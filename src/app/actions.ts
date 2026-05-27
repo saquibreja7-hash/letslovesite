@@ -138,7 +138,7 @@ export async function requestClosedTestingAccess(
   if (!googleFormUrl || !emailEntryId) {
     return {
       status: "error",
-      message: "Closed testing signup is not connected yet.",
+      message: "Early Access signup is not connected yet.",
     };
   }
 
@@ -176,8 +176,8 @@ export async function requestClosedTestingAccess(
     return {
       status: "success",
       message: emailSent
-        ? "Thanks, your request is in. We emailed you the testing links too."
-        : "Thanks, your closed testing request is in.",
+        ? "Thanks, your request is in. We emailed you the Early Access links too."
+        : "Thanks, your Early Access request is in.",
       emailSent,
     };
   } catch {

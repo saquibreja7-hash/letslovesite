@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { useFormStatus } from "react-dom";
-import { CheckCircle2, ExternalLink, Send, Users } from "lucide-react";
+import { Send } from "lucide-react";
 
 import { requestClosedTestingAccess } from "@/app/actions";
 
@@ -15,8 +15,6 @@ const submittedEmailsKey = "lets-love-closed-testing-emails";
 
 type ClosedTestingFormProps = {
   className?: string;
-  googleGroupJoinUrl?: string;
-  googlePlayTestingUrl?: string;
 };
 
 function SubmitButton() {
@@ -25,24 +23,18 @@ function SubmitButton() {
   return (
     <button className="closed-testing-button" type="submit" disabled={pending}>
       <Send className="size-4 shrink-0" />
-      {pending ? "Sending" : "Request access"}
+      {pending ? "Sending" : "Join Early Access"}
     </button>
   );
 }
 
-export function ClosedTestingForm({
-  className = "",
-  googleGroupJoinUrl = "",
-  googlePlayTestingUrl = "",
-}: ClosedTestingFormProps) {
+export function ClosedTestingForm({ className = "" }: ClosedTestingFormProps) {
   const firstNameInputId = useId();
   const emailInputId = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const lastSubmittedEmailRef = useRef("");
   const [duplicateEmail, setDuplicateEmail] = useState("");
   const [state, formAction] = useActionState(requestClosedTestingAccess, initialState);
-  const hasTestingLinks = Boolean(googleGroupJoinUrl || googlePlayTestingUrl);
-  const showNextSteps = (state.status === "success" || Boolean(duplicateEmail)) && hasTestingLinks;
 
   useEffect(() => {
     if (state.status === "success") {
@@ -77,7 +69,7 @@ export function ClosedTestingForm({
     <div className={`closed-testing-wrap ${className}`}>
       <form ref={formRef} action={formAction} className="closed-testing-form" onSubmit={handleSubmit}>
         <label htmlFor={firstNameInputId} className="sr-only">
-          First name for closed testing
+          First name for Early Access
         </label>
         <input
           id={firstNameInputId}
@@ -89,7 +81,7 @@ export function ClosedTestingForm({
           required
         />
         <label htmlFor={emailInputId} className="sr-only">
-          Email address for closed testing
+          Email address for Early Access
         </label>
         <input
           id={emailInputId}
@@ -109,42 +101,8 @@ export function ClosedTestingForm({
       ) : null}
       {duplicateEmail ? (
         <p className="closed-testing-message is-success" role="status" aria-live="polite">
-          You&apos;re already on the list. Continue to closed testing below.
+          You&apos;re already on the list. Please check your inbox for the Early Access details.
         </p>
-      ) : null}
-      {showNextSteps ? (
-        <div className="closed-testing-next-steps" aria-label="Closed testing next steps">
-          <div className="closed-testing-next-heading">
-            <CheckCircle2 className="size-4 shrink-0" />
-            <span>Use the same Google account on your Android phone.</span>
-          </div>
-          {googleGroupJoinUrl ? (
-            <div className="closed-testing-step-card">
-              <span className="closed-testing-step-number">1</span>
-              <span className="closed-testing-step-copy">
-                <strong>Join the tester group</strong>
-                <span>Click Join group in Google Groups, then come back here.</span>
-              </span>
-              <a href={googleGroupJoinUrl} className="closed-testing-step-button is-group" target="_blank" rel="noreferrer">
-                <Users className="size-4 shrink-0" />
-                Join group
-              </a>
-            </div>
-          ) : null}
-          {googlePlayTestingUrl ? (
-            <div className="closed-testing-step-card">
-              <span className="closed-testing-step-number">2</span>
-              <span className="closed-testing-step-copy">
-                <strong>Accept the Play test</strong>
-                <span>Open the test link and choose Become a tester.</span>
-              </span>
-              <a href={googlePlayTestingUrl} className="closed-testing-step-button" target="_blank" rel="noreferrer">
-                <ExternalLink className="size-4 shrink-0" />
-                Open test
-              </a>
-            </div>
-          ) : null}
-        </div>
       ) : null}
     </div>
   );
