@@ -335,7 +335,15 @@ word-break: break-word !important;
 
 export const legalSnapshotNav = legalSnapshots.map(({ slug, navLabel }) => ({ slug, navLabel }));
 
+const legalSlugAliases: Record<string, string> = {
+  "privacy-policy": "privacy",
+  "terms-and-conditions": "terms",
+  "delete-account": "account-deletion",
+};
+
 export function getLegalSnapshot(slug: string) {
-  return legalSnapshots.find((page) => page.slug === slug);
+  const canonicalSlug = legalSlugAliases[slug] ?? slug;
+
+  return legalSnapshots.find((page) => page.slug === canonicalSlug);
 }
 

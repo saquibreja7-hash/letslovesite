@@ -12,7 +12,12 @@ type LegalRouteProps = {
 };
 
 export function generateStaticParams() {
-  return legalSnapshots.map((page) => ({ legalSlug: page.slug }));
+  return [
+    ...legalSnapshots.map((page) => ({ legalSlug: page.slug })),
+    { legalSlug: "privacy-policy" },
+    { legalSlug: "terms-and-conditions" },
+    { legalSlug: "delete-account" },
+  ];
 }
 
 export async function generateMetadata({ params }: LegalRouteProps): Promise<Metadata> {
