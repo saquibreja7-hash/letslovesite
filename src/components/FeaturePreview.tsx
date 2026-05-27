@@ -1,10 +1,9 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { useState, useEffect, useRef, type ComponentType } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type ComponentType } from "react";
 import { CalendarDays, GalleryHorizontal, MessageCircle, Users } from "lucide-react";
 
-import homeShot from "../../Assests/Screenshot_20260524_175953_Let's Love.jpg";
 import memoriesShot from "../../Assests/Screenshot_20260524_193259_Let's Love.jpg";
 import chatShot from "../../Assests/Screenshot_20260524_184547_Let's Love.jpg";
 import goalsShot from "../../Assests/Screenshot_20260524_182158_Let's Love.jpg";
@@ -57,24 +56,30 @@ const features: Array<{
   },
 ];
 
+function subscribeToMobileQuery(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia("(max-width: 900px)");
+  mediaQuery.addEventListener("change", onStoreChange);
+
+  return () => mediaQuery.removeEventListener("change", onStoreChange);
+}
+
+function getMobileQuerySnapshot() {
+  return window.matchMedia("(max-width: 900px)").matches;
+}
+
+function getServerMobileQuerySnapshot() {
+  return false;
+}
+
 export function FeaturePreview() {
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useSyncExternalStore(
+    subscribeToMobileQuery,
+    getMobileQuerySnapshot,
+    getServerMobileQuerySnapshot,
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const [stageState, setStageState] = useState<"top" | "fixed" | "bottom">("top");
   const trackRef = useRef<HTMLDivElement>(null);
-
-  // 1. Detect if screen width is mobile (<= 900px)
-  useEffect(() => {
-    const mql = window.matchMedia("(max-width: 900px)");
-    setIsMobile(mql.matches);
-
-    const handleMqlChange = (e: MediaQueryListEvent) => {
-      setIsMobile(e.matches);
-    };
-
-    mql.addEventListener("change", handleMqlChange);
-    return () => mql.removeEventListener("change", handleMqlChange);
-  }, []);
 
   // 2. Mobile-only scroll listener for fixed-stage progress mapping
   useEffect(() => {
@@ -138,8 +143,6 @@ export function FeaturePreview() {
       behavior: "smooth",
     });
   };
-
-  const activeFeature = features[activeIndex];
 
   return (
     <>

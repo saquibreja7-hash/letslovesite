@@ -6,7 +6,6 @@ import {
   CalendarCheck,
   ChevronDown,
   ClipboardList,
-  Diamond,
   Flame,
   Gamepad2,
   GalleryHorizontal,
@@ -15,28 +14,25 @@ import {
   ImageIcon,
   Mail,
   MessageCircle,
-  Mic,
-  Palette,
-  Send,
   ShieldCheck,
   Smile,
   Sparkles,
-  Video,
 } from "lucide-react";
 
+import { ClosedTestingForm } from "@/components/ClosedTestingForm";
 import { FeaturePreview } from "@/components/FeaturePreview";
 import { HeroPhoneParallax } from "@/components/HeroPhoneParallax";
 import { MascotParallax } from "@/components/MascotParallax";
 import { RoutineParallax } from "@/components/RoutineParallax";
 import homeShot from "../../Assests/Screenshot_20260524_175953_Let's Love.jpg";
-import memoriesShot from "../../Assests/Screenshot_20260524_193259_Let's Love.jpg";
 import moodShot from "../../Assests/Screenshot_20260524_181020_Let's Love.jpg";
-import chatShot from "../../Assests/Screenshot_20260524_184910_Let's Love.jpg";
 import moodBoardShowcase from "../../Assests/Screenshot_20260524_180845_Let's Love.jpg";
 import touchScannerShowcase from "../../Assests/Screenshot_20260524_181806_Let's Love.jpg";
 import dateIdeasShowcase from "../../Assests/Screenshot_20260524_185118_Let's Love.jpg";
 
 const navItems = ["Features", "Together", "Plans", "Privacy", "FAQ"];
+const googleGroupJoinUrl = process.env.GOOGLE_GROUP_JOIN_URL ?? "";
+const googlePlayTestingUrl = process.env.GOOGLE_PLAY_TESTING_URL ?? "";
 
 const heroScreens = [
   { src: moodShot, alt: "Let's Love mood board screen", className: "hero-phone hero-phone-left" },
@@ -201,13 +197,13 @@ export default function Home() {
               Learn more
             </a>
             <a
-              href="#features"
+              href="#closed-testing"
               className="site-nav-cta"
             >
               <svg className="size-3.5 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
               </svg>
-              Get the app
+              Closed testing
             </a>
           </div>
         </div>
@@ -291,16 +287,8 @@ export default function Home() {
             Chat, voice note, save memories, plan dates, answer daily questions, send love touches, and keep your relationship rituals in one calm Android app.
           </p>
 
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href="#features"
-              className="inline-flex h-12 items-center gap-2.5 rounded-full bg-[#2379ff] px-6 text-sm font-black text-white shadow-xl shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-[#1267e7]"
-            >
-              <svg className="size-4 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
-              </svg>
-              Signup For Closed Testing
-            </a>
+          <div id="closed-testing" className="mt-7 scroll-mt-28">
+            <ClosedTestingForm googleGroupJoinUrl={googleGroupJoinUrl} googlePlayTestingUrl={googlePlayTestingUrl} />
           </div>
 
           <div className="hero-stage" aria-label="Let's Love product screenshots">
@@ -577,15 +565,11 @@ export default function Home() {
           <p className="mx-auto mt-5 max-w-2xl text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
             Chat like a messenger, save moments like a social app, plan dates like a calendar, keep photos like a gallery, and send love like only a couple app can.
           </p>
-          <a
-            href="#features"
-            className="mt-8 inline-flex h-12 items-center gap-2.5 rounded-full bg-[#2379ff] px-6 text-sm font-black text-white shadow-xl shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-[#1267e7]"
-          >
-            <svg className="size-4 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
-            </svg>
-            Signup For Closed Testing
-          </a>
+          <ClosedTestingForm
+            className="mt-8"
+            googleGroupJoinUrl={googleGroupJoinUrl}
+            googlePlayTestingUrl={googlePlayTestingUrl}
+          />
         </div>
       </section>
 
