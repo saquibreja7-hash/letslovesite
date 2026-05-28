@@ -6,6 +6,10 @@
   --font-sans: var(--font-inter), sans-serif;
   --font-display: var(--font-serif), serif;
   --font-handwritten: var(--font-organic), cursive;
+  --app-cta-gradient: linear-gradient(135deg, #ff2a73, #ff415e 48%, #ff7428);
+  --app-cta-shadow: rgba(255, 42, 115, 0.22);
+  --app-cta-shadow-strong: rgba(255, 42, 115, 0.3);
+  --app-cta-focus: rgba(255, 42, 115, 0.2);
 }
 
 * {
@@ -140,13 +144,13 @@ img {
   justify-content: center;
   gap: 0.5rem;
   border-radius: 9999px;
-  background: #111827;
+  background: var(--app-cta-gradient);
   padding: 0 1.25rem;
   color: #ffffff;
   font-size: 0.88rem;
   font-weight: 700;
   box-shadow:
-    0 10px 22px rgba(15, 23, 42, 0.18),
+    0 10px 22px var(--app-cta-shadow),
     inset 0 0 0 1px rgba(255, 255, 255, 0.12);
   transition:
     background 160ms ease,
@@ -155,9 +159,9 @@ img {
 }
 
 .site-nav-cta:hover {
-  background: #020617;
+  background: var(--app-cta-gradient);
   box-shadow:
-    0 14px 28px rgba(15, 23, 42, 0.22),
+    0 14px 28px var(--app-cta-shadow-strong),
     inset 0 0 0 1px rgba(255, 255, 255, 0.14);
   transform: translateY(-1px);
 }
@@ -506,13 +510,13 @@ img {
   margin: 0 auto;
   border: 0;
   border-radius: 9999px;
-  background: #2379ff;
+  background: var(--app-cta-gradient);
   padding: 0 1.15rem;
   color: #ffffff;
   cursor: pointer;
   font-size: 0.82rem;
   font-weight: 950;
-  box-shadow: 0 12px 24px rgba(35, 121, 255, 0.22);
+  box-shadow: 0 12px 24px var(--app-cta-shadow);
   transition:
     background 160ms ease,
     box-shadow 160ms ease,
@@ -520,8 +524,8 @@ img {
 }
 
 .closed-testing-mobile-trigger:hover {
-  background: #1267e7;
-  box-shadow: 0 18px 34px rgba(35, 121, 255, 0.3);
+  background: var(--app-cta-gradient);
+  box-shadow: 0 18px 34px var(--app-cta-shadow-strong);
   transform: translateY(-1px);
 }
 
@@ -614,12 +618,12 @@ img {
   gap: 0.5rem;
   border: 0;
   border-radius: 9999px;
-  background: #2379ff;
+  background: var(--app-cta-gradient);
   color: #ffffff;
   cursor: pointer;
   font-size: 0.88rem;
   font-weight: 900;
-  box-shadow: 0 16px 30px rgba(35, 121, 255, 0.24);
+  box-shadow: 0 16px 30px var(--app-cta-shadow);
   transition:
     background 160ms ease,
     box-shadow 160ms ease,
@@ -627,14 +631,14 @@ img {
 }
 
 .closed-testing-button:hover {
-  background: #1267e7;
-  box-shadow: 0 18px 34px rgba(35, 121, 255, 0.3);
+  background: var(--app-cta-gradient);
+  box-shadow: 0 18px 34px var(--app-cta-shadow-strong);
   transform: translateY(-1px);
 }
 
 .closed-testing-button:focus-visible,
 .closed-testing-input:focus-visible {
-  outline: 3px solid rgba(35, 121, 255, 0.2);
+  outline: 3px solid var(--app-cta-focus);
   outline-offset: 2px;
 }
 
