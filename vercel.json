@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/auth/action",
+      "destination": "/auth-action.html"
+    },
+    {
+      "source": "/__/auth/action",
+      "destination": "/auth-action.html"
+    }
+  ]
+}

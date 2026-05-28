@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reset your Let's Love password</title>
+    <meta name="description" content="Create a new password for your Let's Love account." />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #fff6f8;
+        --panel: #ffffff;
+        --ink: #25131b;
+        --muted: #77616b;
+        --line: #efd5de;
+        --primary: #990033;
+        --primary-dark: #650524;
+        --success-bg: #e9f8ef;
+        --success-ink: #17613a;
+        --error-bg: #fde8e8;
+        --error-ink: #9f1d1d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 12% 10%, rgba(255, 211, 198, 0.8), transparent 30%),
+          radial-gradient(circle at 88% 16%, rgba(215, 231, 255, 0.9), transparent 28%),
+          linear-gradient(145deg, #fff9fb 0%, var(--bg) 54%, #f7fbff 100%);
+      }
+
+      main {
+        width: min(960px, calc(100% - 32px));
+        min-height: 100vh;
+        margin: 0 auto;
+        display: grid;
+        place-items: center;
+        padding: 32px 0;
+      }
+
+      .shell {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 0.88fr) minmax(320px, 1fr);
+        overflow: hidden;
+        border: 1px solid rgba(153, 0, 51, 0.12);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: 0 24px 80px rgba(101, 5, 36, 0.16);
+      }
+
+      .brand {
+        min-height: 600px;
+        padding: 36px;
+        color: white;
+        background:
+          linear-gradient(160deg, rgba(101, 5, 36, 0.98), rgba(153, 0, 51, 0.94)),
+          var(--primary-dark);
+      }
+
+      .logo {
+        width: 78px;
+        height: 78px;
+        object-fit: contain;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .brand h1 {
+        margin: 120px 0 14px;
+        max-width: 390px;
+        font-size: clamp(2.5rem, 5vw, 4.8rem);
+        line-height: 0.96;
+      }
+
+      .brand p {
+        max-width: 380px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1.02rem;
+        line-height: 1.7;
+      }
+
+      .panel {
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        padding: 42px;
+        background: rgba(255, 255, 255, 0.86);
+      }
+
+      .content {
+        width: 100%;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: var(--primary);
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        margin: 0 0 12px;
+        font-size: clamp(1.9rem, 4vw, 3rem);
+        line-height: 1.02;
+      }
+
+      .intro {
+        margin: 0 0 26px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .loading {
+        margin: 24px 0;
+        color: var(--muted);
+      }
+
+      form {
+        display: grid;
+        gap: 18px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--ink);
+        font-size: 0.92rem;
+        font-weight: 700;
+      }
+
+      input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 15px 16px;
+        color: var(--ink);
+        background: white;
+        font: inherit;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: rgba(153, 0, 51, 0.55);
+        box-shadow: 0 0 0 4px rgba(153, 0, 51, 0.1);
+      }
+
+      .hint {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      button {
+        width: 100%;
+        border: 0;
+        border-radius: 999px;
+        padding: 15px 18px;
+        color: white;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        font: inherit;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        cursor: wait;
+        opacity: 0.72;
+      }
+
+      .message {
+        margin-top: 22px;
+        border-radius: 16px;
+        padding: 15px 16px;
+        color: var(--muted);
+        background: #f7edf1;
+        line-height: 1.55;
+      }
+
+      .message.success {
+        color: var(--success-ink);
+        background: var(--success-bg);
+      }
+
+      .message.error {
+        color: var(--error-ink);
+        background: var(--error-bg);
+      }
+
+      .support {
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      a {
+        color: var(--primary);
+        font-weight: 800;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          width: min(100% - 22px, 520px);
+          padding: 18px 0;
+        }
+
+        .shell {
+          grid-template-columns: 1fr;
+          border-radius: 22px;
+        }
+
+        .brand {
+          min-height: auto;
+          padding: 28px;
+        }
+
+        .brand h1 {
+          margin-top: 42px;
+        }
+
+        .panel {
+          min-height: auto;
+          padding: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="shell" aria-label="Let's Love password reset">
+        <aside class="brand">
+          <img class="logo" src="/logo.png" alt="Let's Love" />
+          <h1>Create a new password</h1>
+          <p>Use this secure Firebase reset link to update your Let's Love sign-in password.</p>
+        </aside>
+
+        <section class="panel">
+          <div class="content">
+            <p class="eyebrow">Account recovery</p>
+            <h2>Reset password</h2>
+            <p class="intro" id="intro">Checking your reset link...</p>
+
+            <p class="loading" id="loading">Please wait a moment.</p>
+
+            <form id="reset-form" hidden>
+              <div>
+                <label for="password">New password</label>
+                <input id="password" name="password" type="password" autocomplete="new-password" minlength="6" required />
+                <p class="hint">Use at least 6 characters.</p>
+              </div>
+
+              <div>
+                <label for="confirm-password">Confirm password</label>
+                <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" minlength="6" required />
+              </div>
+
+              <button id="submit" type="submit">Update password</button>
+            </form>
+
+            <div id="result" class="message" hidden></div>
+            <p class="support">Need help? Email <a href="mailto:support@jamsaq.in">support@jamsaq.in</a>.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+      import {
+        confirmPasswordReset,
+        getAuth,
+        verifyPasswordResetCode,
+      } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyB2M8NlmBdTE4pdBwKv_CA9lke9hAJbQHA",
+        authDomain: "lets-love.firebaseapp.com",
+        projectId: "lets-love",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get("mode");
+      const oobCode = params.get("oobCode");
+
+      const intro = document.getElementById("intro");
+      const loading = document.getElementById("loading");
+      const form = document.getElementById("reset-form");
+      const result = document.getElementById("result");
+      const submit = document.getElementById("submit");
+      const passwordInput = document.getElementById("password");
+      const confirmInput = document.getElementById("confirm-password");
+
+      function showResult(message, variant = "info") {
+        loading.hidden = true;
+        result.hidden = false;
+        result.textContent = message;
+        result.className = `message ${variant}`.trim();
+      }
+
+      if (mode !== "resetPassword" || !oobCode) {
+        intro.textContent = "This reset link is incomplete.";
+        showResult("Please request a new password reset link from the Let's Love app.", "error");
+      } else {
+        verifyPasswordResetCode(auth, oobCode)
+          .then(() => {
+            loading.hidden = true;
+            form.hidden = false;
+            intro.textContent = "Choose a new password for your Let's Love account.";
+          })
+          .catch(() => {
+            intro.textContent = "This reset link can no longer be used.";
+            showResult("The link has expired or was already used. Please request a new reset link from the app.", "error");
+          });
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const password = passwordInput.value;
+        const confirmPassword = confirmInput.value;
+
+        if (password.length < 6) {
+          showResult("Password must be at least 6 characters.", "error");
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showResult("Passwords do not match.", "error");
+          return;
+        }
+
+        submit.disabled = true;
+        submit.textContent = "Updating...";
+
+        try {
+          await confirmPasswordReset(auth, oobCode, password);
+          form.hidden = true;
+          intro.textContent = "Your password has been updated.";
+          showResult("You can now sign in to the Let's Love app with your new password.", "success");
+        } catch {
+          showResult("Could not update your password. Please request a new reset link from the app.", "error");
+        } finally {
+          submit.disabled = false;
+          submit.textContent = "Update password";
+        }
+      });
+    </script>
+  </body>
+</html>

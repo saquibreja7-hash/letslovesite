@@ -283,7 +283,7 @@ export default function Home() {
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
-            Chat, voice note, save memories, plan dates, answer daily questions, send love touches, and keep your relationship rituals in one calm Android app.
+            Chat like a messenger, save moments like a social app, plan dates like a calendar, keep photos like a gallery, and send love like only a couple app can.
           </p>
 
           <div id="closed-testing" className="mt-7 scroll-mt-28">
