@@ -33,11 +33,13 @@ EARLY_ACCESS_ISSUER_SECRET=your_shared_backend_secret
 EARLY_ACCESS_VOUCHER_DAYS=90
 RESEND_API_KEY=re_your_api_key
 RESEND_FROM_EMAIL="Let's Love <testing@yourdomain.com>"
+NEXT_PUBLIC_SITE_URL=https://your-production-domain.com
 ```
 
 `GOOGLE_FORM_EMAIL_ENTRY_ID` is the Google Forms field name for the email input. `GOOGLE_FORM_FIRST_NAME_ENTRY_ID` is optional; add it if the Google Form also has a first-name question.
 Resend is optional. When `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `EARLY_ACCESS_VOUCHER_FUNCTION_URL`, and `EARLY_ACCESS_ISSUER_SECRET` are set, the server action asks the app backend for a unique email-bound Premium voucher and includes it in the Early Access email after signup. The form also remembers submitted emails in the current browser and asks returning users to check their inbox instead of treating duplicates as an error.
 `EARLY_ACCESS_VOUCHER_DAYS` controls how many Premium days the generated in-app voucher grants. The app backend is the source of truth for voucher creation and redemption.
+`NEXT_PUBLIC_SITE_URL` should point to the production website so email clients can load the hosted logo image from `/logo.png`.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

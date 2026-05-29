@@ -50,6 +50,20 @@ function formatVoucherDuration(days: number) {
   return `${days} days`;
 }
 
+function getPublicAssetUrl(path: string) {
+  const rawBaseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    process.env.VERCEL_URL;
+
+  if (!rawBaseUrl) {
+    return "";
+  }
+
+  const baseUrl = rawBaseUrl.startsWith("http") ? rawBaseUrl : `https://${rawBaseUrl}`;
+  return new URL(path, baseUrl).toString();
+}
+
 async function issueEarlyAccessVoucher(email: string, firstName: string): Promise<IssuedVoucher | null> {
   const endpoint = process.env.EARLY_ACCESS_VOUCHER_FUNCTION_URL;
   const issuerSecret = process.env.EARLY_ACCESS_ISSUER_SECRET;
@@ -100,6 +114,10 @@ function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTe
   const safeInstagramUrl = escapeHtml(instagramUrl);
   const safeVoucherCode = escapeHtml(voucher.voucherCode);
   const durationLabel = escapeHtml(formatVoucherDuration(voucher.durationDays));
+  const logoUrl = getPublicAssetUrl("/logo.png");
+  const logoHtml = logoUrl
+    ? `<img src="${escapeHtml(logoUrl)}" width="76" height="76" alt="Let's Love" style="display:block;margin:0 auto 14px;border:0;border-radius:18px;outline:none;text-decoration:none;">`
+    : "";
 
   return `
     <!doctype html>
@@ -107,6 +125,7 @@ function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTe
       <body style="margin:0;padding:0;background:#ffffff;font-family:Arial,Helvetica,sans-serif;color:#000000;">
         <div style="max-width:600px;margin:0 auto;padding:0 40px;">
           <div style="padding:28px 0 26px;text-align:center;">
+            ${logoHtml}
             <p style="margin:0;color:#000000;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:700;line-height:1.2;">Let's Love</p>
             <p style="margin:4px 0 0;color:#64748b;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.4;letter-spacing:0.12em;text-transform:uppercase;">Closed Testing</p>
           </div>
