@@ -1,5 +1,8 @@
 "use server";
 
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 type ClosedTestingSignupState = {
   status: "idle" | "success" | "error";
   message: string;
@@ -8,10 +11,19 @@ type ClosedTestingSignupState = {
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const voucherCodePattern = /^[A-Z0-9-]{4,32}$/;
+const signatureContentId = "saquib-signature";
+const logoContentId = "lets-love-logo";
 
 type IssuedVoucher = {
   voucherCode: string;
   durationDays: number;
+};
+
+type ResendAttachment = {
+  filename: string;
+  content: string;
+  content_type: string;
+  content_id: string;
 };
 
 function getGoogleFormActionUrl(rawUrl: string) {
@@ -38,8 +50,8 @@ function escapeHtml(value: string) {
 
 function getConfiguredVoucherDurationDays() {
   const rawDays = process.env.EARLY_ACCESS_VOUCHER_DAYS;
-  const days = rawDays ? Number(rawDays) : 90;
-  return Number.isInteger(days) && days > 0 ? days : 90;
+  const days = rawDays ? Number(rawDays) : 60;
+  return Number.isInteger(days) && days > 0 ? days : 60;
 }
 
 function formatVoucherDuration(days: number) {
@@ -62,6 +74,32 @@ function getPublicAssetUrl(path: string) {
 
   const baseUrl = rawBaseUrl.startsWith("http") ? rawBaseUrl : `https://${rawBaseUrl}`;
   return new URL(path, baseUrl).toString();
+}
+
+async function getEmailImageAttachment(
+  fileName: string,
+  contentId: string,
+): Promise<ResendAttachment | null> {
+  try {
+    const image = await readFile(path.join(process.cwd(), "public", fileName));
+
+    return {
+      filename: fileName,
+      content: image.toString("base64"),
+      content_type: "image/png",
+      content_id: contentId,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function getSignatureAttachment() {
+  return getEmailImageAttachment("email-signature-saquib.png", signatureContentId);
+}
+
+async function getLogoAttachment() {
+  return getEmailImageAttachment("email-logo-small.png", logoContentId);
 }
 
 async function issueEarlyAccessVoucher(email: string, firstName: string): Promise<IssuedVoucher | null> {
@@ -106,17 +144,27 @@ async function issueEarlyAccessVoucher(email: string, firstName: string): Promis
   };
 }
 
-function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTestingUrl: string, voucher: IssuedVoucher) {
-  const instagramUrl = "https://www.instagram.com/letsloveapp/";
+function buildClosedTestingEmailHtml(
+  firstName: string,
+  groupUrl: string,
+  playTestingUrl: string,
+  voucher: IssuedVoucher,
+  includeSignature = false,
+  includeInlineLogo = false,
+) {
   const greetingName = firstName ? `, ${escapeHtml(firstName)}` : "";
   const safeGroupUrl = escapeHtml(groupUrl);
   const safePlayTestingUrl = escapeHtml(playTestingUrl);
-  const safeInstagramUrl = escapeHtml(instagramUrl);
   const safeVoucherCode = escapeHtml(voucher.voucherCode);
   const durationLabel = escapeHtml(formatVoucherDuration(voucher.durationDays));
   const logoUrl = getPublicAssetUrl("/logo.png");
-  const logoHtml = logoUrl
+  const logoHtml = includeInlineLogo
+    ? `<img src="cid:${logoContentId}" width="64" height="64" alt="Let's Love" style="display:block;margin:0 auto 14px;border:0;border-radius:14px;outline:none;text-decoration:none;">`
+    : logoUrl
     ? `<img src="${escapeHtml(logoUrl)}" width="76" height="76" alt="Let's Love" style="display:block;margin:0 auto 14px;border:0;border-radius:18px;outline:none;text-decoration:none;">`
+    : "";
+  const signatureHtml = includeSignature
+    ? `<img src="cid:${signatureContentId}" width="92" alt="Saquib signature" style="display:block;width:92px;max-width:44%;height:auto;margin:0 0 8px;border:0;outline:none;text-decoration:none;">`
     : "";
 
   return `
@@ -127,23 +175,24 @@ function buildClosedTestingEmailHtml(firstName: string, groupUrl: string, playTe
           <div style="padding:28px 0 26px;text-align:center;">
             ${logoHtml}
             <p style="margin:0;color:#000000;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:700;line-height:1.2;">Let's Love</p>
-            <p style="margin:4px 0 0;color:#64748b;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.4;letter-spacing:0.12em;text-transform:uppercase;">Closed Testing</p>
+            <p style="margin:4px 0 0;color:#64748b;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.4;letter-spacing:0.12em;text-transform:uppercase;">Early Access</p>
           </div>
           <div style="font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:normal;letter-spacing:normal;line-height:1.5;text-align:left;color:#000000;">
             <p style="margin:0;">Hi${greetingName},<br><br></p>
-            <p style="margin:0;">Thank you for opting in to test Let's Love. We're really happy to have you with us in this early closed testing phase.<br><br></p>
+            <p style="margin:0;">Thank you for joining Let's Love Early Access. We're really happy to have you with us in this first rollout phase.<br><br></p>
+            <p style="margin:0;">You are going to be one of the first users from our very first batch of early users. We are opening Let's Love carefully to a small group before the wider rollout, and we're grateful that you are part of this first circle.<br><br></p>
             <p style="margin:0;">Please complete these two steps using the same Google account you use on your Android phone:<br><br></p>
             <p style="margin:0;">1. Join the tester Google Group: <a href="${safeGroupUrl}" style="color:#0068A5;text-decoration:underline;">Join group</a><br></p>
             <p style="margin:0;">2. Accept the Google Play test: <a href="${safePlayTestingUrl}" style="color:#0068A5;text-decoration:underline;">Open Play testing</a><br><br></p>
-            <p style="margin:0;"><strong>As a small thank you, here is your ${durationLabel} Premium voucher code: ${safeVoucherCode}</strong><br><br></p>
-            <p style="margin:0;">Redeem this code inside the app after you and your partner are paired. The code is tied to this email address and unlocks Premium for both partners in your couple space.<br><br></p>
-            <p style="margin:0;">Since Let's Love is made for couples, please invite your partner to be part of closed testing too. Testing together will improve your app experience and give you a real opportunity to try the app the way it is meant to be used.<br><br></p>
+            <p style="margin:0;"><strong>Your ${durationLabel} Premium voucher code is: ${safeVoucherCode}</strong><br><br></p>
+            <p style="margin:0;">Redeem this code inside the app after you and your partner are paired. This voucher is exclusively attached to this email ID and can be used only once. Once redeemed, it unlocks Premium for both partners in your couple space.<br><br></p>
+            <p style="margin:0;">Since Let's Love is made for couples, please invite your partner to be part of early access too. Testing together will improve your app experience and give you a real opportunity to try the app the way it is meant to be used.<br><br></p>
             <p style="margin:0;">Your privacy matters deeply to us. Your data is stored securely on encrypted Google Cloud servers, and your couple space is designed so only you and your partner can access what you share together.<br><br></p>
             <p style="margin:0;">A small request from us: please keep the app active for 14 days. This helps us meet Google Play testing requirements and gives us enough real usage to improve the experience before publishing.<br><br></p>
-            <p style="margin:0;">Please write back with any bugs, feedback, or feature requests. We'd love to accommodate helpful ideas wherever we can.<br><br></p>
-            <p style="margin:0;">You can also follow us on Instagram: <a href="${safeInstagramUrl}" style="color:#0068A5;text-decoration:underline;">@letsloveapp</a></p>
+            <p style="margin:0;">Please write back with any bugs, feedback, or feature requests. We'd love to accommodate helpful ideas wherever we can.</p>
             <p style="margin:0;"><br>With love,<br><br></p>
-            <p style="margin:0;">JAMSAQ Studio</p>
+            ${signatureHtml}
+            <p style="margin:0;">Saquib</p>
             <p style="margin:0;">&nbsp;</p>
           </div>
           <div style="border-top:1px solid #ededed;padding:20px 0 30px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#64748b;text-align:center;">
@@ -166,48 +215,57 @@ async function sendClosedTestingEmail(email: string, firstName: string, voucher:
     return false;
   }
 
+  const signatureAttachment = await getSignatureAttachment();
+  const logoAttachment = await getLogoAttachment();
+  const payload: Record<string, unknown> = {
+    from: fromEmail,
+    to: email,
+    subject: "Your Let's Love Early Access details",
+    html: buildClosedTestingEmailHtml(firstName, groupUrl, playTestingUrl, voucher, Boolean(signatureAttachment), Boolean(logoAttachment)),
+    text: [
+      firstName ? `Thank you, ${firstName}, for joining Let's Love Early Access.` : "Thank you for joining Let's Love Early Access.",
+      "",
+      "We're really happy to have you with us in this first rollout phase.",
+      "",
+      "You are going to be one of the first users from our very first batch of early users. We are opening Let's Love carefully to a small group before the wider rollout, and we're grateful that you are part of this first circle.",
+      "",
+      "Use the same Google account on your Android phone and complete these steps:",
+      `1. Join the tester Google Group: ${groupUrl}`,
+      `2. Accept the Google Play test: ${playTestingUrl}`,
+      "",
+      `Your ${formatVoucherDuration(voucher.durationDays)} Premium voucher code is: ${voucher.voucherCode}`,
+      "",
+      "This voucher is exclusively attached to this email ID and can be used only once. Once redeemed, it unlocks Premium for both partners in your couple space.",
+      "",
+      "Invite your partner too. Let's Love is made for couples, so testing together will improve your app experience and give you a real opportunity to try the app the way it is meant to be used.",
+      "",
+      "Your privacy matters deeply to us. Your data is stored securely on encrypted Google Cloud servers, and your couple space is designed so only you and your partner can access what you share together.",
+      "",
+      "Please keep the app active for 14 days. This helps us meet Google Play testing requirements and gives us enough real usage to improve the experience before publishing.",
+      "",
+      "Please write back with any bugs, feedback, or feature requests. We'd love to accommodate helpful ideas wherever we can.",
+      "",
+      "For any other enquiry, help, or support, write to us at support@jamsaq.in.",
+      "",
+      "After accepting the test, Google Play will show the install option for Let's Love.",
+      "",
+      "With love,",
+      "Saquib",
+    ].join("\n"),
+  };
+
+  const attachments = [logoAttachment, signatureAttachment].filter(Boolean);
+  if (attachments.length) {
+    payload.attachments = attachments;
+  }
+
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${resendApiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      from: fromEmail,
-      to: email,
-      subject: "Your Let's Love closed testing links",
-      html: buildClosedTestingEmailHtml(firstName, groupUrl, playTestingUrl, voucher),
-      text: [
-        firstName ? `Thank you, ${firstName}, for opting in to test Let's Love.` : "Thank you for opting in to test Let's Love.",
-        "",
-        "We're grateful to have you in the closed test. Your usage and feedback will help us polish the app and move toward publishing on Google Play.",
-        "",
-        "Use the same Google account on your Android phone and complete these steps:",
-        `1. Join the tester Google Group: ${groupUrl}`,
-        `2. Accept the Google Play test: ${playTestingUrl}`,
-        "",
-        `Here is your ${formatVoucherDuration(voucher.durationDays)} Premium voucher code: ${voucher.voucherCode}`,
-        "",
-        "Redeem this code inside the app after you and your partner are paired. The code is tied to this email address and unlocks Premium for both partners in your couple space.",
-        "",
-        "Invite your partner too. Let's Love is made for couples, so testing together will improve your app experience and give you a real opportunity to try the app the way it is meant to be used.",
-        "",
-        "Your privacy matters deeply to us. Your data is stored securely on encrypted Google Cloud servers, and your couple space is designed so only you and your partner can access what you share together.",
-        "",
-        "Please keep the app active for 14 days. This helps us meet Google Play testing requirements and gives us enough real usage to improve the experience before publishing.",
-        "",
-        "Please write back with any bugs, feedback, or feature requests. We'd love to accommodate helpful ideas wherever we can.",
-        "",
-        "Follow Let's Love on Instagram: https://www.instagram.com/letsloveapp/",
-        "",
-        "For any other enquiry, help, or support, write to us at support@jamsaq.in.",
-        "",
-        "After accepting the test, Google Play will show the install option for Let's Love.",
-        "",
-        "With love,",
-        "JAMSAQ Studio",
-      ].join("\n"),
-    }),
+    body: JSON.stringify(payload),
     cache: "no-store",
   });
 
