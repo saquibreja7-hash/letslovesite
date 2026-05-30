@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getLegalSnapshot, legalSnapshots } from "@/app/legalSnapshots";
+import { defaultOpenGraphImage, siteConfig } from "@/app/seo";
 
 type LegalRouteProps = {
   params: Promise<{
@@ -29,8 +30,28 @@ export async function generateMetadata({ params }: LegalRouteProps): Promise<Met
   }
 
   return {
-    title: page.title,
+    title: {
+      absolute: page.title,
+    },
     description: page.description,
+    alternates: {
+      canonical: `/${page.slug}`,
+    },
+    openGraph: {
+      title: page.title,
+      description: page.description,
+      url: `/${page.slug}`,
+      siteName: siteConfig.name,
+      images: [defaultOpenGraphImage],
+      locale: siteConfig.locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.title,
+      description: page.description,
+      images: [defaultOpenGraphImage.url],
+    },
   };
 }
 

@@ -17,6 +17,7 @@
 }
 
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 
@@ -44,6 +45,7 @@ html.lenis-enabled {
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
@@ -1139,7 +1141,8 @@ img {
 
   .hero-phone,
   .layered-phone-card,
-  .connection-phone-frame {
+  .connection-phone-frame,
+  .mascot-orbit-card {
     animation: none;
     translate: 0 0;
   }
@@ -1214,8 +1217,20 @@ img {
 
 .mascot-section {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   --mascot-progress: 0;
+}
+
+@media (min-width: 901px) {
+  .mascot-section {
+    min-height: 285vh;
+    padding-top: 5rem;
+    padding-bottom: 8rem;
+  }
+
+  .mascot-sticky-content {
+    min-height: 245vh;
+  }
 }
 
 .mascot-section::before {
@@ -1320,6 +1335,214 @@ img {
   font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.55;
+}
+
+.mascot-arc-stage {
+  position: sticky;
+  top: clamp(4.25rem, 8vh, 6.5rem);
+  min-height: 660px;
+  margin-top: 4.5rem;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.mascot-arc-stage::before,
+.mascot-arc-stage::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  width: min(15vw, 180px);
+  pointer-events: none;
+}
+
+.mascot-arc-stage::before {
+  left: 0;
+  background: linear-gradient(90deg, #fff 8%, rgba(255, 255, 255, 0));
+}
+
+.mascot-arc-stage::after {
+  right: 0;
+  background: linear-gradient(270deg, #fff 8%, rgba(255, 255, 255, 0));
+}
+
+.mascot-arc-path {
+  position: absolute;
+  inset: 0 auto auto 50%;
+  z-index: 1;
+  width: min(124vw, 1440px);
+  height: 100%;
+  overflow: visible;
+  transform:
+    translateX(-50%)
+    translateX(calc(var(--mascot-progress) * -34px));
+}
+
+.mascot-arc-path path {
+  fill: none;
+  stroke: rgba(255, 79, 123, 0.24);
+  stroke-width: 1.15;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 18px 42px rgba(255, 79, 123, 0.08));
+}
+
+.mascot-crescent {
+  position: absolute;
+  left: 50%;
+  bottom: -155px;
+  z-index: 0;
+  width: min(118vw, 1360px);
+  height: 400px;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(255, 79, 123, 0.085), transparent 58%),
+    radial-gradient(ellipse at 62% 100%, rgba(35, 121, 255, 0.075), transparent 56%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(248, 250, 252, 0.82));
+  opacity: 0.92;
+  transform:
+    translateX(-50%)
+    translateX(calc(var(--mascot-progress) * -34px));
+}
+
+.mascot-arc-copy {
+  position: absolute;
+  left: 50%;
+  bottom: 1.05rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+  width: min(84vw, 560px);
+  color: #0f172a;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.mascot-arc-copy p {
+  margin: 0;
+  border: 1px solid rgba(226, 232, 240, 0.82);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.86);
+  padding: 0.58rem 0.85rem;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 850;
+  box-shadow: 0 14px 32px rgba(148, 163, 184, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.mascot-orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.mascot-orbit-card {
+  --arc-x: 0px;
+  --arc-y: 0px;
+  --arc-rotate: 0deg;
+  --arc-scale: 1;
+  --arc-opacity: 1;
+  --arc-readability: 1;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: clamp(205px, 17.5vw, 278px);
+  aspect-ratio: 1;
+  margin: 0;
+  overflow: hidden;
+  border: 7px solid rgba(255, 255, 255, 0.96);
+  border-radius: 1.35rem;
+  background: #ffffff;
+  box-shadow:
+    0 22px 54px rgba(15, 23, 42, 0.16),
+    0 0 0 1px rgba(226, 232, 240, 0.88);
+  transform-origin: 50% 100%;
+  transform:
+    translate(calc(-50% + var(--arc-x)), calc(var(--arc-y) - 100%))
+    rotate(var(--arc-rotate))
+    scale(var(--arc-scale));
+  opacity: calc(var(--arc-opacity) * var(--arc-readability));
+  filter: saturate(calc(0.82 + (var(--arc-readability) * 0.2)));
+  transition: box-shadow 180ms ease;
+  will-change: transform, opacity;
+}
+
+.mascot-orbit-card:nth-child(1) {
+  --arc-x: -520px;
+  --arc-y: 520px;
+  --arc-rotate: -8.8deg;
+  --arc-scale: 0.98;
+}
+
+.mascot-orbit-card:nth-child(2) {
+  --arc-x: -260px;
+  --arc-y: 405px;
+  --arc-rotate: -4.4deg;
+  --arc-scale: 1.01;
+}
+
+.mascot-orbit-card:nth-child(3) {
+  --arc-x: 0px;
+  --arc-y: 372px;
+  --arc-rotate: 0deg;
+  --arc-scale: 1.035;
+}
+
+.mascot-orbit-card:nth-child(4) {
+  --arc-x: 260px;
+  --arc-y: 405px;
+  --arc-rotate: 4.4deg;
+  --arc-scale: 1.01;
+}
+
+.mascot-orbit-card:nth-child(5) {
+  --arc-x: 520px;
+  --arc-y: 520px;
+  --arc-rotate: 8.8deg;
+  --arc-scale: 0.98;
+}
+
+.mascot-orbit-card:nth-child(6) {
+  --arc-x: 780px;
+  --arc-y: 552px;
+  --arc-rotate: 12deg;
+  --arc-opacity: 0;
+}
+
+.mascot-orbit-card:nth-child(7) {
+  --arc-x: 1040px;
+  --arc-y: 552px;
+  --arc-rotate: 12deg;
+  --arc-opacity: 0;
+}
+
+.mascot-orbit-card:nth-child(8) {
+  --arc-x: 1300px;
+  --arc-y: 552px;
+  --arc-rotate: 12deg;
+  --arc-opacity: 0;
+}
+
+.mascot-orbit-card:nth-child(9) {
+  --arc-x: 1560px;
+  --arc-y: 552px;
+  --arc-rotate: 12deg;
+  --arc-opacity: 0;
+}
+
+.mascot-orbit-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mascot-swipe-hint {
+  display: none;
 }
 
 .hero-phone {
@@ -2702,6 +2925,69 @@ img {
     transform: none;
   }
 
+  .mascot-arc-stage {
+    display: grid;
+    position: relative;
+    top: auto;
+    min-height: auto;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .mascot-arc-stage::before,
+  .mascot-arc-stage::after,
+  .mascot-arc-path {
+    display: none;
+  }
+
+  .mascot-crescent {
+    position: relative;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    width: min(88vw, 420px);
+    height: 170px;
+    margin: 0 auto;
+    transform: none;
+  }
+
+  .mascot-arc-copy {
+    position: relative;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    width: min(72vw, 320px);
+    margin: -4.6rem auto 0;
+    transform: none;
+  }
+
+  .mascot-arc-copy p {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.78rem;
+  }
+
+  .mascot-orbit {
+    position: relative;
+    inset: auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    width: min(100%, 460px);
+    margin: 0 auto;
+  }
+
+  .mascot-orbit-card,
+  .mascot-orbit-card:nth-child(n) {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    border-width: 5px;
+    border-radius: 1rem;
+    opacity: 1;
+    transform: none;
+  }
+
   .layered-showcase {
     border-radius: 2rem;
     padding-top: 3rem;
@@ -2880,6 +3166,75 @@ img {
   .mascot-section {
     padding-top: 4rem;
     padding-bottom: 4rem;
+    min-height: auto;
+  }
+
+  .mascot-arc-stage {
+    gap: 0;
+    margin-top: 2rem;
+  }
+
+  .mascot-crescent,
+  .mascot-arc-copy {
+    display: none;
+  }
+
+  .mascot-orbit {
+    display: flex;
+    width: calc(100vw + 1px);
+    max-width: none;
+    margin-right: calc(50% - 50vw);
+    margin-left: calc(50% - 50vw);
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    pointer-events: auto;
+    padding: 0.4rem max(1.25rem, calc((100vw - 23rem) / 2)) 1.35rem;
+    scroll-padding-inline: max(1.25rem, calc((100vw - 23rem) / 2));
+    scroll-snap-type: x mandatory;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mascot-orbit::-webkit-scrollbar {
+    height: 0;
+  }
+
+  .mascot-orbit-card,
+  .mascot-orbit-card:nth-child(n) {
+    flex: 0 0 min(84vw, 23rem);
+    width: min(84vw, 23rem);
+    border-width: 6px;
+    border-radius: 1.35rem;
+    box-shadow:
+      0 22px 58px rgba(15, 23, 42, 0.16),
+      0 0 0 1px rgba(226, 232, 240, 0.92);
+    scroll-snap-align: center;
+  }
+
+  .mascot-swipe-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    margin: 0.15rem auto 0;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .mascot-swipe-hint::before,
+  .mascot-swipe-hint::after {
+    content: "";
+    display: block;
+    width: 1.65rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(100, 116, 139, 0.42));
+  }
+
+  .mascot-swipe-hint::after {
+    background: linear-gradient(90deg, rgba(100, 116, 139, 0.42), transparent);
   }
 
   .mascot-image-wrap {
@@ -3399,6 +3754,51 @@ img {
   font-weight: 600;
   letter-spacing: -0.01em;
   margin: 0;
+}
+
+.site-footer-instagram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0 1.15rem;
+  border: 1px solid rgba(228, 64, 95, 0.28);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site-footer-instagram:hover {
+  transform: translateY(-1px);
+  border-color: rgba(228, 64, 95, 0.55);
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.12);
+}
+
+.site-footer-instagram:focus-visible {
+  outline: 3px solid rgba(228, 64, 95, 0.22);
+  outline-offset: 3px;
+}
+
+.site-footer-instagram-icon {
+  display: inline-flex;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+  color: #e4405f;
+}
+
+.site-footer-instagram-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
 }
 
 .site-footer-links {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Inter, Schoolbell } from "next/font/google";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { siteConfig } from "@/app/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,11 +22,32 @@ const schoolbell = Schoolbell({
 });
 
 export const metadata: Metadata = {
-  title: "Let's Love - Private Couple App for Chat, Memories, Goals, Dates, and Daily Connection",
-  description:
-    "Let's Love is an Android-first private couple app for paired partners to chat, send voice notes, save memories, track goals and todos, plan dates, answer daily questions, play games, and stay emotionally connected.",
-  keywords:
-    "couple app, relationship app, app for couples, long distance couple app, shared calendar for couples, couple goals app, private couple chat, voice notes for couples, date ideas app, love touch app, daily questions for couples, couple memories app, mood check-in app for couples",
+  metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  authors: [{ name: siteConfig.companyName, url: siteConfig.url }],
+  creator: siteConfig.companyName,
+  publisher: siteConfig.companyName,
+  category: "relationship app",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/app-icon.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export default function RootLayout({

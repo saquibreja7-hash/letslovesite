@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import type { ComponentType, CSSProperties } from "react";
@@ -25,13 +26,39 @@ import { FeaturePreview } from "@/components/FeaturePreview";
 import { HeroPhoneParallax } from "@/components/HeroPhoneParallax";
 import { MascotParallax } from "@/components/MascotParallax";
 import { RoutineParallax } from "@/components/RoutineParallax";
+import { absoluteUrl, defaultOpenGraphImage, siteConfig } from "@/app/seo";
 import homeShot from "../../Assests/Screenshot_20260524_175953_Let's Love.jpg";
 import moodShot from "../../Assests/Screenshot_20260524_181020_Let's Love.jpg";
 import moodBoardShowcase from "../../Assests/Screenshot_20260524_180845_Let's Love.jpg";
-import touchScannerShowcase from "../../Assests/Screenshot_20260524_181806_Let's Love.jpg";
 import dateIdeasShowcase from "../../Assests/Screenshot_20260524_185118_Let's Love.jpg";
+import coupleStreakShowcase from "../../Assests/couple-streak-showcase.jpg";
 
 const navItems = ["Features", "Together", "Plans", "Privacy", "FAQ"];
+
+export const metadata: Metadata = {
+  title: {
+    absolute: siteConfig.title,
+  },
+  description: siteConfig.description,
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: absoluteUrl("/"),
+    siteName: siteConfig.name,
+    images: [defaultOpenGraphImage],
+    locale: siteConfig.locale,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [defaultOpenGraphImage.url],
+  },
+};
 
 const heroScreens = [
   { src: moodShot, alt: "Let's Love mood board screen", className: "hero-phone hero-phone-left" },
@@ -48,10 +75,10 @@ const layeredScreens = [
     className: "layered-phone-left",
   },
   {
-    src: touchScannerShowcase,
-    alt: "Let's Love touch scanner screen",
-    title: "Love Touch",
-    copy: "A playful live scanner that turns presence into a shared moment.",
+    src: coupleStreakShowcase,
+    alt: "Let's Love couple streak screen",
+    title: "Couple Streak",
+    copy: "Keep a gentle daily rhythm alive with shared check-ins and streaks.",
     className: "layered-phone-center",
   },
   {
@@ -100,6 +127,18 @@ const connectionTools: Array<{
   { title: "Mood Board", copy: "Pin little notes for each other so the day has a place to land.", icon: ClipboardList },
 ];
 
+const closenessArcCards = [
+  { src: "/mascots/arc/couple-arc-1.png", alt: "Let's Love couple moment illustration" },
+  { src: "/mascots/arc/couple-arc-2.png", alt: "Let's Love private couple illustration" },
+  { src: "/mascots/arc/couple-arc-3.png", alt: "Let's Love daily ritual illustration" },
+  { src: "/mascots/arc/couple-arc-4.png", alt: "Let's Love memory sharing illustration" },
+  { src: "/mascots/arc/couple-arc-5.png", alt: "Let's Love date planning illustration" },
+  { src: "/mascots/arc/couple-arc-6.png", alt: "Let's Love couple chat illustration" },
+  { src: "/mascots/arc/couple-arc-7.png", alt: "Let's Love private gallery illustration" },
+  { src: "/mascots/arc/couple-arc-8.png", alt: "Let's Love emotional check-in illustration" },
+  { src: "/mascots/arc/couple-arc-9.png", alt: "Let's Love togetherness illustration" },
+];
+
 
 
 const appComparisonTiles: Array<{
@@ -133,7 +172,7 @@ const faqs = [
   },
   {
     q: "Is Premium for one person or both?",
-    a: "The app copy from the product says: one subscription, two accounts. Premium unlocks the couple space for both partners rather than charging each person separately.",
+    a: "Premium is for both of you. One subscription unlocks the shared couple space, so both partners get access without paying separately.",
   },
   {
     q: "Is it useful for long-distance couples?",
@@ -157,6 +196,49 @@ const faqs = [
   },
 ];
 
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": absoluteUrl("/#organization"),
+      name: siteConfig.companyName,
+      url: absoluteUrl("/"),
+      logo: absoluteUrl("/logo.png"),
+      email: siteConfig.supportEmail,
+      sameAs: [siteConfig.instagramUrl],
+    },
+    {
+      "@type": "WebSite",
+      "@id": absoluteUrl("/#website"),
+      name: siteConfig.name,
+      url: absoluteUrl("/"),
+      inLanguage: "en",
+      publisher: {
+        "@id": absoluteUrl("/#organization"),
+      },
+    },
+    {
+      "@type": "MobileApplication",
+      "@id": absoluteUrl("/#mobile-app"),
+      name: siteConfig.name,
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Android",
+      url: absoluteUrl("/"),
+      description: siteConfig.description,
+      image: [
+        absoluteUrl("/app-screenshot-1.jpg"),
+        absoluteUrl("/app-screenshot-2.jpg"),
+        absoluteUrl("/app-screenshot-3.jpg"),
+        absoluteUrl("/app-screenshot-4.jpg"),
+      ],
+      publisher: {
+        "@id": absoluteUrl("/#organization"),
+      },
+    },
+  ],
+};
+
 function PhoneFrame({
   src,
   alt,
@@ -175,7 +257,13 @@ function PhoneFrame({
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#fbfdff] text-[#111827]">
+    <main className="min-h-screen bg-[#fbfdff] text-[#111827]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(homeJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <header className="site-header">
         <div className="site-nav-pill">
           <a href="#" className="site-brand">
@@ -301,50 +389,34 @@ export default function Home() {
 
       <section className="mascot-section px-5 py-14 sm:px-8" aria-label="How Let's Love brings couples together">
         <MascotParallax />
-        <div className="mx-auto max-w-7xl">
+        <div className="mascot-sticky-content mx-auto max-w-7xl">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-balance text-3xl font-normal tracking-tight text-slate-950 sm:text-4xl">
-              Three ways Let&apos;s Love brings you closer
+              Built around the little rituals that keep couples close
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm font-medium leading-6 text-slate-500">
-              From first pairing to private rituals, each part of the app is built to help couples feel present, protected, and connected.
+              From shared plans and daily questions to private memories, quotes, and desire lists, each space gives couples a simple way to stay present together.
             </p>
           </div>
 
-          <div className="mascot-card-stage">
-            {[
-              {
-                src: "/mascots/intro-connection.png",
-                alt: "Couple connecting through Let's Love",
-                title: "Connect from anywhere",
-                copy: "Pair privately, send small signals, and keep presence alive even when the day pulls you apart.",
-                className: "mascot-card-left",
-              },
-              {
-                src: "/mascots/intro-private.png",
-                alt: "Couple sharing a private hug",
-                title: "Keep it just between you",
-                copy: "Your chats, memories, letters, and prompts live in one space made for exactly two people.",
-                className: "mascot-card-center",
-              },
-              {
-                src: "/mascots/intro-together.png",
-                alt: "Couple using phones together",
-                title: "Build daily rituals",
-                copy: "Turn check-ins, date plans, mood notes, and questions into little routines you both return to.",
-                className: "mascot-card-right",
-              },
-            ].map((card) => (
-              <article key={card.title} className={`mascot-card ${card.className}`}>
-                <div className="mascot-image-wrap">
-                  <Image src={card.src} alt={card.alt} width={620} height={620} sizes="(max-width: 900px) 82vw, 360px" className="mascot-image" />
-                </div>
-                <div className="mascot-card-copy">
-                  <h3>{card.title}</h3>
-                  <p>{card.copy}</p>
-                </div>
-              </article>
-            ))}
+          <div className="mascot-arc-stage" aria-label="Let's Love couple moments">
+            <svg className="mascot-arc-path" viewBox="0 0 1200 700" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M -120 545 Q 600 220 1320 545" />
+            </svg>
+            <div className="mascot-crescent" aria-hidden="true" />
+            <div className="mascot-arc-copy">
+              <p>Connect from anywhere</p>
+              <p>Keep it just between you</p>
+              <p>Build daily rituals</p>
+            </div>
+            <div className="mascot-orbit" aria-hidden="true">
+              {closenessArcCards.map((card, index) => (
+                <figure key={card.src} className="mascot-orbit-card" style={{ "--arc-index": index } as CSSProperties}>
+                  <Image src={card.src} alt={card.alt} width={360} height={360} sizes="(max-width: 900px) 34vw, 180px" className="mascot-orbit-image" />
+                </figure>
+              ))}
+            </div>
+            <p className="mascot-swipe-hint" aria-hidden="true">Swipe to explore more</p>
           </div>
         </div>
       </section>
@@ -571,7 +643,23 @@ export default function Home() {
       <footer className="site-footer">
         <div className="site-footer-content">
           <p className="site-footer-copyright">© 2026 Lets Love. All rights reserved.</p>
-          
+          <a
+            href="https://www.instagram.com/letsloveapp"
+            className="site-footer-instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Follow us on Instagram"
+          >
+            <span className="site-footer-instagram-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <rect x="4" y="4" width="16" height="16" rx="4.5" />
+                <circle cx="12" cy="12" r="3.7" />
+                <circle cx="17" cy="7" r="1.1" />
+              </svg>
+            </span>
+            Follow us on Instagram
+          </a>
+
           <div className="site-footer-links">
             <Link href="/terms" className="site-footer-link">Terms</Link>
             <Link href="/privacy" className="site-footer-link">Privacy</Link>

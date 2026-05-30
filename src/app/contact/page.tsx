@@ -2,10 +2,29 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail } from "lucide-react";
+import { defaultOpenGraphImage, siteConfig } from "@/app/seo";
 
 export const metadata: Metadata = {
-  title: "Contact - Let's Love",
+  title: "Contact",
   description: "Contact Let's Love support for help, feedback, legal, privacy, or account questions.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact Let's Love Support",
+    description: "Contact Let's Love support for help, feedback, legal, privacy, or account questions.",
+    url: "/contact",
+    siteName: siteConfig.name,
+    images: [defaultOpenGraphImage],
+    locale: siteConfig.locale,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Let's Love Support",
+    description: "Contact Let's Love support for help, feedback, legal, privacy, or account questions.",
+    images: [defaultOpenGraphImage.url],
+  },
 };
 
 export default function ContactPage() {
