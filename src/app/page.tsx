@@ -4,9 +4,7 @@ import Link from "next/link";
 import type { ComponentType, CSSProperties } from "react";
 import {
   ArrowRight,
-  ArrowUpRight,
   CalendarCheck,
-  ChevronDown,
   ClipboardList,
   Flame,
   Gamepad2,
@@ -127,6 +125,43 @@ const connectionTools: Array<{
   { title: "Mood Board", copy: "Pin little notes for each other so the day has a place to land.", icon: ClipboardList },
 ];
 
+const privacyPrinciples: Array<{
+  title: string;
+  copy: string;
+  icon: ComponentType<{ className?: string }>;
+}> = [
+  {
+    title: "Invite-only pairing",
+    copy: "A 6-character code or QR flow creates one couple space. Codes expire after 24 hours, cannot be reused, and expired codes are cleaned up automatically.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Signed-in couple access",
+    copy: "Firebase Authentication, Firestore rules, and Storage rules check that a user is signed in and belongs to the couple before shared messages, memories, plans, or media can be read.",
+    icon: GalleryHorizontal,
+  },
+  {
+    title: "Server-owned relationship state",
+    copy: "Clients cannot directly create couples, read pairing codes, change a user's couple link, or reactivate a couple. Pairing and unpairing run through authenticated, rate-limited Cloud Functions.",
+    icon: MessageCircle,
+  },
+  {
+    title: "Device-side app locks",
+    copy: "PIN and biometric lock settings stay on the device. Fingerprint or face data is handled by the operating system and is not sent to Let's Love servers.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Deletion and diagnostics controls",
+    copy: "The app includes privacy contact and verified account/data deletion flows, while crash and performance context is sanitized to redact tokens, emails, URLs, phone numbers, and storage paths.",
+    icon: ClipboardList,
+  },
+  {
+    title: "Encrypted transport",
+    copy: "App traffic to Firebase, Google Cloud, and Cloud Functions uses HTTPS/TLS, so data is encrypted while moving between the app and backend services.",
+    icon: ShieldCheck,
+  },
+];
+
 const closenessArcCards = [
   { src: "/mascots/arc/couple-arc-1.png", alt: "Let's Love couple moment illustration" },
   { src: "/mascots/arc/couple-arc-2.png", alt: "Let's Love private couple illustration" },
@@ -184,11 +219,11 @@ const faqs = [
   },
   {
     q: "How secure is our private space?",
-    a: "Your chats, photos, and letters are protected with robust, Firebase-backed security. We prioritize your privacy above all else—there are no public profiles, no search indexes, and absolutely no data sharing with advertisers.",
+    a: "Let's Love uses Firebase Authentication, Firestore and Storage rules, HTTPS/TLS transport, and Cloud Functions for sensitive pairing or unpairing changes. There are no public profiles or search-indexed couple spaces, and PIN or biometric app locks stay on the device.",
   },
   {
     q: "What happens to our data if one of us deletes the app?",
-    a: "Your shared space remains safely backed up in the cloud. If you reinstall the app or change devices, simply log back in to reconnect instantly. You can also permanently delete your account and all associated data from the settings at any time.",
+    a: "Your shared space remains backed up in the cloud if you uninstall the app or change devices. You can also request verified account and associated data deletion from Legal & Privacy in the app or from the public account deletion page.",
   },
   {
     q: "Can we customize the look of our shared home screen?",
@@ -280,9 +315,6 @@ export default function Home() {
           </nav>
 
           <div className="site-nav-actions">
-            <a href="#faq" className="site-nav-secondary">
-              Learn more
-            </a>
             <a
               href="#closed-testing"
               className="site-nav-cta"
@@ -543,23 +575,21 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="faq" className="px-5 py-14 sm:px-8">
-        <div className="mx-auto max-w-4xl">
-          <div className="text-center">
-            <h2 className="text-balance text-4xl font-display text-slate-950 sm:text-5xl tracking-normal">
-              Common Questions
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-sm font-medium text-slate-500 leading-6">
-              Everything you need to know about Let&apos;s Love features, privacy, and plans.
+      <section id="faq" className="faq-section px-5 py-16 sm:px-8 sm:py-20">
+        <div className="faq-shell mx-auto">
+          <div className="faq-heading">
+            <h2>Frequently asked questions</h2>
+            <p>
+              Everything you need to know about Let&apos;s Love features, pairing, privacy, and plans.
             </p>
           </div>
 
-          <div className="mx-auto mt-12 max-w-3xl">
-            {faqs.map((faq) => (
-              <details key={faq.q} className="faq-details group">
+          <div className="faq-list">
+            {faqs.map((faq, index) => (
+              <details key={faq.q} className="faq-details" open={index === 1}>
                 <summary className="faq-summary">
-                  {faq.q}
-                  <ChevronDown className="faq-chevron" />
+                  <span>{faq.q}</span>
+                  <span className="faq-toggle" aria-hidden="true" />
                 </summary>
                 <p className="faq-answer">{faq.a}</p>
               </details>
@@ -568,49 +598,62 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="privacy" className="privacy-editorial px-5 py-14 sm:px-8">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1fr] lg:items-start">
+      <section id="privacy" className="privacy-editorial px-5 py-16 sm:px-8 sm:py-20">
+        <div className="privacy-shell mx-auto max-w-7xl">
           <div className="privacy-editorial-copy">
+            <span className="privacy-kicker">
+              <ShieldCheck className="size-4" />
+              Privacy by default
+            </span>
             <h2 className="text-balance text-4xl font-normal tracking-tight text-slate-950 sm:text-5xl">
-              Private by default, <span className="text-[#ff4f7b]">personal by design.</span>
+              Privacy built into every couple space.
             </h2>
             <p className="mt-6 text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
-              Let&apos;s Love keeps your couple space intimate, useful, and made only for two.
+              Let&apos;s Love treats privacy like an app architecture: pair intentionally, verify couple membership,
+              run sensitive changes on the server, keep locks local, and give users a deletion path.
             </p>
-            <a
-              href="#features"
-              className="mt-9 inline-flex h-11 items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:text-slate-950"
-            >
-              See private features
-              <ArrowRight className="size-4" />
-            </a>
+            <div className="privacy-actions">
+              <Link href="/privacy" className="privacy-primary-link">
+                Privacy Policy
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link href="/data-safety" className="privacy-secondary-link">
+                Data Safety
+              </Link>
+            </div>
+
           </div>
 
-          <div className="privacy-editorial-list">
-            {[
-              {
-                title: "For Pairing",
-                copy: "one invite flow creates a private home screen that only both partners can access.",
-              },
-              {
-                title: "For Memories",
-                copy: "photos, comments, reactions, albums, and shared gallery moments stay inside your paired space.",
-              },
-              {
-                title: "For Daily Rituals",
-                copy: "questions, goals, date ideas, streaks, and check-ins help you return to each other without noisy feeds.",
-              },
-              {
-                title: "For Trust",
-                copy: "app lock, account deletion, restrictive media rules, and Firebase-backed controls support a safer private space.",
-              },
-            ].map((item) => (
-              <div key={item.title} className="privacy-editorial-point">
-                <ArrowUpRight className="privacy-editorial-arrow" />
-                <p>
-                  <strong>{item.title}:</strong> {item.copy}
-                </p>
+          <div className="privacy-blueprint" aria-label="How Let's Love keeps couple spaces private">
+            <div className="privacy-blueprint-core">
+              <span className="privacy-core-kicker">Private core</span>
+              <span className="privacy-core-emblem">
+                <Heart className="size-6" />
+              </span>
+              <h3>One active couple space, guarded at each layer.</h3>
+              <p>
+                Firebase Auth, Firestore rules, Storage rules, Cloud Functions, HTTPS/TLS, on-device locks,
+                and deletion controls all support the same rule: only the right two accounts should get through.
+              </p>
+              <div className="privacy-core-stack" aria-label="Privacy layers">
+                <span>Auth</span>
+                <span>Rules</span>
+                <span>Functions</span>
+                <span>Device lock</span>
               </div>
+            </div>
+
+            {privacyPrinciples.map(({ title, copy, icon: Icon }, index) => (
+              <article key={title} className={`privacy-node privacy-node-${index + 1}`}>
+                <span className="privacy-node-icon">
+                  <Icon className="size-5" />
+                </span>
+                <span>
+                  <span className="privacy-node-index">{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </span>
+              </article>
             ))}
           </div>
         </div>
