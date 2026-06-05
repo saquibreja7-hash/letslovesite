@@ -34,10 +34,7 @@ export const metadata: Metadata = {
   publisher: siteConfig.companyName,
   category: "relationship app",
   icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon", type: "image/png", sizes: "256x256" },
-    ],
+    icon: [{ url: "/icon", type: "image/png", sizes: "256x256" }],
     apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
   },
   robots: {
