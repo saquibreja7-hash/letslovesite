@@ -2,11 +2,13 @@
 
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { after } from "next/server";
 
 type ClosedTestingSignupState = {
   status: "idle" | "success" | "error";
   message: string;
   emailSent?: boolean;
+  followUpQueued?: boolean;
 };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -272,6 +274,37 @@ async function sendClosedTestingEmail(email: string, firstName: string, voucher:
   return response.ok;
 }
 
+function canQueueClosedTestingFollowUp() {
+  return Boolean(
+    process.env.EARLY_ACCESS_VOUCHER_FUNCTION_URL &&
+      process.env.EARLY_ACCESS_ISSUER_SECRET &&
+      process.env.RESEND_API_KEY &&
+      process.env.RESEND_FROM_EMAIL &&
+      process.env.GOOGLE_GROUP_JOIN_URL &&
+      process.env.GOOGLE_PLAY_TESTING_URL,
+  );
+}
+
+function queueClosedTestingFollowUp(email: string, firstName: string) {
+  if (!canQueueClosedTestingFollowUp()) {
+    return false;
+  }
+
+  after(async () => {
+    try {
+      const voucher = await issueEarlyAccessVoucher(email, firstName);
+
+      if (voucher) {
+        await sendClosedTestingEmail(email, firstName, voucher);
+      }
+    } catch (error) {
+      console.error("Closed testing follow-up failed", error);
+    }
+  });
+
+  return true;
+}
+
 export async function requestClosedTestingAccess(
   _previousState: ClosedTestingSignupState,
   formData: FormData,
@@ -320,21 +353,15 @@ export async function requestClosedTestingAccess(
       };
     }
 
-    let emailSent = false;
-
-    try {
-      const voucher = await issueEarlyAccessVoucher(email, firstName);
-      emailSent = voucher ? await sendClosedTestingEmail(email, firstName, voucher) : false;
-    } catch {
-      emailSent = false;
-    }
+    const followUpQueued = queueClosedTestingFollowUp(email, firstName);
 
     return {
       status: "success",
-      message: emailSent
-        ? "Thanks, your request is in. We emailed you the Early Access links too."
-        : "Thanks, your Early Access request is in.",
-      emailSent,
+      message: followUpQueued
+        ? "You're on the Early Access list. We're preparing your tester links and Premium voucher now, and you'll receive them by email shortly."
+        : "You're on the Early Access list. We'll follow up with the testing steps soon.",
+      emailSent: false,
+      followUpQueued,
     };
   } catch {
     return {

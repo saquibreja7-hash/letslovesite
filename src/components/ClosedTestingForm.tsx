@@ -23,7 +23,7 @@ function SubmitButton() {
   return (
     <button className="closed-testing-button" type="submit" disabled={pending}>
       <Send className="size-4 shrink-0" />
-      {pending ? "Sending" : "Join Early Access"}
+      {pending ? "Saving spot" : "Join Early Access"}
     </button>
   );
 }
@@ -135,7 +135,7 @@ export function ClosedTestingForm({ className = "" }: ClosedTestingFormProps) {
       ) : null}
       {duplicateEmail ? (
         <p className="closed-testing-message is-success" role="status" aria-live="polite">
-          You&apos;re already on the list. Please check your inbox for the Early Access details.
+          You&apos;re already on the list. If the email has not arrived yet, please wait a minute and check spam or promotions.
         </p>
       ) : null}
       {isModalOpen ? (
@@ -152,7 +152,7 @@ export function ClosedTestingForm({ className = "" }: ClosedTestingFormProps) {
             </button>
             <div className="closed-testing-modal-copy">
               <h2 id={`${modalFirstNameInputId}-title`}>Join Early Access</h2>
-              <p>Enter your details and we&apos;ll email you the testing steps.</p>
+              <p>We&apos;ll save your spot first, then email your testing steps and voucher shortly.</p>
             </div>
             <form
               ref={mobileFormRef}

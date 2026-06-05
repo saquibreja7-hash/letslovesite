@@ -11,7 +11,7 @@ export const siteConfig = {
 };
 
 export const defaultOpenGraphImage = {
-  url: "/opengraph-image",
+  url: "/link-preview.png",
   width: 1200,
   height: 630,
   alt: "Let's Love private couple app landing page preview",
