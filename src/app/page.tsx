@@ -294,7 +294,7 @@ function PlayStoreButton({ className = "" }: { className?: string }) {
   return (
     <a
       href={playStoreUrl}
-      className={`closed-testing-button ${className}`}
+      className={`closed-testing-button app-store-button ${className}`}
       target="_blank"
       rel="noopener noreferrer"
     >

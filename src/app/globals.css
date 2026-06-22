@@ -633,6 +633,14 @@ img {
     transform 160ms ease;
 }
 
+.app-store-button {
+  width: auto;
+  min-width: 13.5rem;
+  max-width: 100%;
+  padding: 0 1.35rem;
+  white-space: nowrap;
+}
+
 .closed-testing-button:hover {
   background: var(--app-cta-gradient);
   box-shadow: 0 18px 34px var(--app-cta-shadow-strong);
@@ -3448,6 +3456,13 @@ img {
   .closed-testing-button {
     width: 100%;
     min-width: 0;
+  }
+
+  .app-store-button {
+    width: auto;
+    min-width: 0;
+    max-width: calc(100vw - 2.5rem);
+    padding: 0 1.15rem;
   }
 
   .closed-testing-modal-form {
