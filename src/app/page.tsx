@@ -19,7 +19,6 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { ClosedTestingForm } from "@/components/ClosedTestingForm";
 import { FeaturePreview } from "@/components/FeaturePreview";
 import { HeroPhoneParallax } from "@/components/HeroPhoneParallax";
 import { MascotParallax } from "@/components/MascotParallax";
@@ -32,6 +31,7 @@ import dateIdeasShowcase from "../../Assests/Screenshot_20260524_185118_Let's Lo
 import coupleStreakShowcase from "../../Assests/couple-streak-showcase.jpg";
 
 const navItems = ["Features", "Together", "Plans", "Privacy", "FAQ"];
+const playStoreUrl = "https://play.google.com/store/apps/details?id=com.letslove.app";
 
 export const metadata: Metadata = {
   title: {
@@ -290,6 +290,22 @@ function PhoneFrame({
   );
 }
 
+function PlayStoreButton({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href={playStoreUrl}
+      className={`closed-testing-button ${className}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg className="size-4 shrink-0 fill-current" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
+      </svg>
+      Download on Play Store
+    </a>
+  );
+}
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#fbfdff] text-[#111827]">
@@ -316,13 +332,15 @@ export default function Home() {
 
           <div className="site-nav-actions">
             <a
-              href="#closed-testing"
+              href={playStoreUrl}
               className="site-nav-cta"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <svg className="size-3.5 fill-current shrink-0" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
               </svg>
-              Early Access
+              Download App
             </a>
           </div>
         </div>
@@ -406,8 +424,8 @@ export default function Home() {
             Chat like a messenger, save moments like a social app, plan dates like a calendar, keep photos like a gallery, and send love like only a couple app can.
           </p>
 
-          <div id="closed-testing" className="mt-7 scroll-mt-28">
-            <ClosedTestingForm />
+          <div id="download-app" className="mt-7 flex justify-center scroll-mt-28">
+            <PlayStoreButton />
           </div>
 
           <div className="hero-stage" aria-label="Let's Love product screenshots">
@@ -679,7 +697,9 @@ export default function Home() {
           <p className="mx-auto mt-5 max-w-2xl text-balance text-base font-medium leading-7 text-slate-500 sm:text-lg">
             Chat like a messenger, save moments like a social app, plan dates like a calendar, keep photos like a gallery, and send love like only a couple app can.
           </p>
-          <ClosedTestingForm className="mt-8" />
+          <div className="mt-8 flex justify-center">
+            <PlayStoreButton />
+          </div>
         </div>
       </section>
 
